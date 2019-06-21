@@ -18,6 +18,9 @@ public class Utils {
 	private static Logger log = LogManager.getLogger();
 
 	private static final String SELECT_PROPERTY_SQL = "SELECT `propertyValue` FROM property WHERE `propertyName`=?";
+	private static final String SELECT_KV_SQL = "SELECT `value` FROM kvStore WHERE `key`=?";
+	private static final String UPSERT_KV_SQL = "INSERT INTO kvStore (`key`,`value`) VALUES (?,?) ON DUPLICATE KEY UPDATE `value`=VALUES(`value`)";
+	private static final String DELETE_KV_SQL = "DELETE FROM kvStore WHERE `key`=?";
 	private static final String SELECT_ETAG_SQL = "SELECT `etag` FROM apiReq WHERE `apiReqName`=?";
 	private static final String UPSERT_ETAG_SQL = "INSERT INTO apiReq (`apiReqName`,`etag`) VALUES(?,?) ON DUPLICATE KEY UPDATE `apiReqName`=VALUES(`apiReqName`),`etag`=VALUES(`etag`)";
 
@@ -104,6 +107,54 @@ public class Utils {
 		}
 		// if the int parse failed, try bool parse (defaults to false)
 		return Boolean.parseBoolean(s);
+	}
+
+	public static String getKV(Connection db, String key) {
+		if (db == null || key == null || key.isEmpty()) {
+			log.warn("The db and key must be non-null and non-empty");
+			return null;
+		}
+		String value = "";
+		try {
+			PreparedStatement stmt = db.prepareStatement(SELECT_KV_SQL);
+			stmt.setString(1, key);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				value = rs.getString("value");
+			}
+		} catch (SQLException e) {
+			log.warn("Failed to read kv '" + key + "' from database", e);
+		}
+		return value;
+	}
+
+	public static void putKV(Connection db, String key, String value) {
+		if (db == null || key == null || key.isEmpty()) {
+			log.warn("The db and key must be non-null and non-empty");
+			return;
+		}
+		try {
+			PreparedStatement stmt = db.prepareStatement(UPSERT_KV_SQL);
+			stmt.setString(1, key);
+			stmt.setString(2, value);
+			stmt.execute();
+		} catch (SQLException e) {
+			log.warn("Failed to upsert kv '" + key + "' to database", e);
+		}
+	}
+
+	public static void deleteKV(Connection db, String key) {
+		if (db == null || key == null || key.isEmpty()) {
+			log.warn("The db and key must be non-null and non-empty");
+			return;
+		}
+		try {
+			PreparedStatement stmt = db.prepareStatement(DELETE_KV_SQL);
+			stmt.setString(1, key);
+			stmt.execute();
+		} catch (SQLException e) {
+			log.warn("Failed to delete kv '" + key + "' from database", e);
+		}
 	}
 
 	public static String getApiDatasource() {

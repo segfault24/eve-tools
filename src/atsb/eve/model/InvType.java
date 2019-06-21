@@ -8,11 +8,8 @@ public class InvType {
 	private String description;
 	private double mass;
 	private double volume;
-	private double capacity;
-	private int portionSize;
 	private boolean published;
 	private int marketGroupId;
-	private int iconId;
 
 	public InvType() {
 	}
@@ -65,22 +62,6 @@ public class InvType {
 		this.volume = volume;
 	}
 
-	public double getCapacity() {
-		return capacity;
-	}
-
-	public void setCapacity(double capacity) {
-		this.capacity = capacity;
-	}
-
-	public int getPortionSize() {
-		return portionSize;
-	}
-
-	public void setPortionSize(int portionSize) {
-		this.portionSize = portionSize;
-	}
-
 	public boolean isPublished() {
 		return published;
 	}
@@ -95,14 +76,6 @@ public class InvType {
 
 	public void setMarketGroupId(int marketGroupId) {
 		this.marketGroupId = marketGroupId;
-	}
-
-	public int getIconId() {
-		return iconId;
-	}
-
-	public void setIconId(int iconId) {
-		this.iconId = iconId;
 	}
 
 }

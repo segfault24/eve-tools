@@ -9,17 +9,16 @@ import java.util.List;
 
 import atsb.eve.model.InvType;
 
-public class InvTypesTable {
+public class InvTypeTable {
 
-	private static final String SELECT_ALL_IDS_SQL = "SELECT typeID FROM invTypes";
-	private static final String UPSERT_SQL = "INSERT INTO invTypes "
-			+ "(`typeID`,`groupID`,`typeName`,`description`,`mass`,`volume`,`capacity`,`portionSize`,`published`,`marketGroupID`,`iconID`) "
-			+ "VALUES (?,?,?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE "
-			+ "`typeID`=VALUES(`typeID`), `groupID`=VALUES(`groupID`), `typeName`=VALUES(`typeName`), `description`=VALUES(`description`), "
-			+ "`mass`=VALUES(`mass`), `volume`=VALUES(`volume`), `capacity`=VALUES(`capacity`), `portionSize`=VALUES(`portionSize`), "
-			+ "`published`=VALUES(`published`), `marketGroupID`=VALUES(`marketGroupID`), `iconID`=VALUES(`iconID`)";
+	private static final String SELECT_ALL_IDS_SQL = "SELECT typeId FROM invType";
+	private static final String UPSERT_SQL = "INSERT INTO invType "
+			+ "(`typeId`,`groupId`,`typeName`,`description`,`mass`,`volume`,`published`,`marketGroupId`) "
+			+ "VALUES (?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE "
+			+ "`typeId`=VALUES(`typeId`), `groupId`=VALUES(`groupId`), `typeName`=VALUES(`typeName`), `description`=VALUES(`description`), "
+			+ "`mass`=VALUES(`mass`), `volume`=VALUES(`volume`), `published`=VALUES(`published`), `marketGroupId`=VALUES(`marketGroupId`)";
 
-	private static final String SELECT_MARKETABLE_TYPES_SQL = "SELECT typeId FROM invTypes WHERE published=1 AND marketGroupID IS NOT NULL";
+	private static final String SELECT_MARKETABLE_TYPES_SQL = "SELECT typeId FROM invType WHERE published=1 AND marketGroupId IS NOT NULL";
 
 	public static List<Integer> selectAllIds(Connection db) throws SQLException {
 		PreparedStatement stmt = db.prepareStatement(SELECT_ALL_IDS_SQL);
@@ -39,11 +38,14 @@ public class InvTypesTable {
 		stmt.setString(4, i.getDescription());
 		stmt.setDouble(5, i.getMass());
 		stmt.setDouble(6, i.getVolume());
-		stmt.setDouble(7, i.getCapacity());
-		stmt.setInt(8, i.getPortionSize());
-		stmt.setBoolean(9, i.isPublished());
-		stmt.setInt(10, i.getMarketGroupId());
-		stmt.setInt(11, i.getIconId());
+		stmt.setBoolean(7, i.isPublished());
+		stmt.setInt(8, i.getMarketGroupId());
+		stmt.execute();
+	}
+
+	public static void delete(Connection db, InvType i) throws SQLException {
+		PreparedStatement stmt = db.prepareStatement("DELETE FROM invType WHERE typeId=?");
+		stmt.setInt(1, i.getTypeId());
 		stmt.execute();
 	}
 

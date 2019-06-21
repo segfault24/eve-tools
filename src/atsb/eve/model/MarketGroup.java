@@ -1,6 +1,6 @@
 package atsb.eve.model;
 
-public class InvMarketGroup {
+public class MarketGroup {
 
 	private int marketGroupId;
 	private int parentGroupId;
@@ -8,7 +8,7 @@ public class InvMarketGroup {
 	private String description;
 	private boolean hasTypes;
 
-	public InvMarketGroup() {
+	public MarketGroup() {
 	}
 
 	public int getMarketGroupId() {
