@@ -54,16 +54,28 @@ public class Utils {
 
 	public static List<Integer> parseIntList(String input) {
 		List<Integer> values = new ArrayList<Integer>();
-		for (String s : input.split(",")) {
-			values.add(Integer.parseInt(s.trim()));
+		if (input != null && !input.isEmpty()) {
+			for (String s : input.split(",")) {
+				try {
+					values.add(Integer.parseInt(s.trim()));
+				} catch (NumberFormatException e) {
+					log.warn("bad number specified in int list");
+				}
+			}
 		}
 		return values;
 	}
 
 	public static List<Long> parseLongList(String input) {
 		List<Long> values = new ArrayList<Long>();
-		for (String s : input.split(",")) {
-			values.add(Long.parseLong(s.trim()));
+		if (input != null && !input.isEmpty()) {
+			for (String s : input.split(",")) {
+				try {
+					values.add(Long.parseLong(s.trim()));
+				} catch (NumberFormatException e) {
+					log.warn("bad number specified in long list");
+				}
+			}
 		}
 		return values;
 	}
