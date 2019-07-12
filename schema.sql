@@ -226,19 +226,41 @@ CREATE TABLE `dirtStructAuth` (
 		REFERENCES `structure` (`structId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `dirtAlert`;
+CREATE TABLE `dirtAlert` (
+	`alertId` INT AUTO_INCREMENT,
+	`userId` INT NOT NULL,
+	`alertType` INT NOT NULL,
+	`enabled` BOOLEAN NOT NULL DEFAULT TRUE,
+	`param1` VARCHAR(255),
+	`param2` VARCHAR(255),
+	`param3` VARCHAR(255),
+	`param4` VARCHAR(255),
+	`param5` VARCHAR(255),
+	PRIMARY KEY (`alertId`),
+	FOREIGN KEY (`userId`)
+		REFERENCES `dirtUser`(`userId`)
+		ON DELETE CASCADE,
+	KEY `ix_dirtAlert_userId` (`userId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 DROP TABLE IF EXISTS `dirtNotification`;
 CREATE TABLE `dirtNotification` (
 	`notifId` INT AUTO_INCREMENT,
 	`time` TIMESTAMP NOT NULL,
 	`userId` INT NOT NULL,
+	`alertId` INT,
 	`title` VARCHAR(64),
 	`text` VARCHAR(1024),
-	`read` BOOLEAN NOT NULL DEFAULT FALSE,
+	`acknowledged` BOOLEAN NOT NULL DEFAULT FALSE,
 	PRIMARY KEY (`notifId`),
 	FOREIGN KEY (`userId`)
 		REFERENCES `dirtUser`(`userId`)
 		ON DELETE CASCADE,
-	KEY `ix_notification_userId` (`userId`)
+	FOREIGN KEY (`alertId`)
+		REFERENCES `dirtAlert`(`alertId`)
+		ON DELETE SET NULL,
+	KEY `ix_dirtNotification_userId` (`userId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `fortchain`;
