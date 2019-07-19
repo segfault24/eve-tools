@@ -12,6 +12,8 @@ import atsb.eve.model.InvType;
 public class InvTypeTable {
 
 	private static final String SELECT_ALL_IDS_SQL = "SELECT typeId FROM invType";
+	private static final String SELECT_BY_ID_SQL = "SELECT `typeId`,`groupId`,`typeName`,"
+			+ "`description`,`mass`,`volume`,`published`,`marketGroupId` FROM invType WHERE `typeId`=?";
 	private static final String UPSERT_SQL = "INSERT INTO invType "
 			+ "(`typeId`,`groupId`,`typeName`,`description`,`mass`,`volume`,`published`,`marketGroupId`) "
 			+ "VALUES (?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE "
@@ -28,6 +30,26 @@ public class InvTypeTable {
 			types.add(rs.getInt(1));
 		}
 		return types;
+	}
+
+	public static InvType getById(Connection db, int i) throws SQLException {
+		PreparedStatement stmt = db.prepareStatement(SELECT_BY_ID_SQL);
+		stmt.setInt(1, i);
+		ResultSet rs = stmt.executeQuery();
+		if (rs.next()) {
+			InvType t = new InvType();
+			t.setTypeId(rs.getInt(1));
+			t.setGroupId(rs.getInt(2));
+			t.setTypeName(rs.getString(3));
+			t.setDescription(rs.getString(4));
+			t.setMass(rs.getDouble(5));
+			t.setVolume(rs.getDouble(6));
+			t.setPublished(rs.getBoolean(7));
+			t.setMarketGroupId(rs.getInt(8));
+			return t;
+		} else {
+			return null;
+		}
 	}
 
 	public static void upsert(Connection db, InvType i) throws SQLException {

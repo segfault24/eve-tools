@@ -26,6 +26,7 @@ public class MapTables {
 			+ "`stationName`=VALUES(`stationName`), `solarSystemId`=VALUES(`solarSystemId`), `constellationId`=VALUES(`constellationId`), `regionId`=VALUES(`regionId`)";
 
 	private static final String REGION_BY_SYSTEM_SQL = "SELECT r.`regionId`, r.`regionName`, r.`description` FROM region AS r JOIN solarSystem AS s ON s.regionId=r.regionId WHERE s.solarSystemId=?";
+	private static final String REGION_BY_NAME_SQL = "SELECT `regionId`, `regionName`, `description` FROM region WHERE `regionName`=?";
 
 	public static void upsert(Connection db, Region r) throws SQLException {
 		PreparedStatement stmt = db.prepareStatement(REGION_UPSERT_SQL);
@@ -93,6 +94,18 @@ public class MapTables {
 	public static Region findRegionBySystem(Connection db, int systemId) throws SQLException {
 		PreparedStatement stmt = db.prepareStatement(REGION_BY_SYSTEM_SQL);
 		stmt.setInt(1, systemId);
+		ResultSet rs = stmt.executeQuery();
+		rs.next();
+		Region r = new Region();
+		r.setReigonId(rs.getInt(1));
+		r.setRegionName(rs.getString(2));
+		r.setDescription(rs.getString(3));
+		return r;
+	}
+
+	public static Region findRegionByName(Connection db, String name) throws SQLException {
+		PreparedStatement stmt = db.prepareStatement(REGION_BY_NAME_SQL);
+		stmt.setString(1, name);
 		ResultSet rs = stmt.executeQuery();
 		rs.next();
 		Region r = new Region();

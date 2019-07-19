@@ -250,9 +250,11 @@ CREATE TABLE `dirtNotification` (
 	`time` TIMESTAMP NOT NULL,
 	`userId` INT NOT NULL,
 	`alertId` INT,
+	`typeId` INT,
 	`title` VARCHAR(64),
 	`text` VARCHAR(1024),
 	`acknowledged` BOOLEAN NOT NULL DEFAULT FALSE,
+	`sent` BOOLEAN NOT NULL DEFAULT FALSE,
 	PRIMARY KEY (`notifId`),
 	FOREIGN KEY (`userId`)
 		REFERENCES `dirtUser`(`userId`)
@@ -377,7 +379,8 @@ CREATE TABLE `marketOrder` (
 	PRIMARY KEY (`orderEntryId`),
 	UNIQUE KEY `ux_marketOrder_orderId_retrieved` (`orderId`, `retrieved`),
 	KEY `ix_marketOrder_typeId_regionId` (`typeId`, `regionId`),
-	KEY `ix_marketOrder_locationId` (`locationId`)
+	KEY `ix_marketOrder_locationId` (`locationId`),
+	KEY `ix_marketOrder_regionId` (`regionId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `insurancePrice`;

@@ -11,9 +11,9 @@ import atsb.eve.model.Notification;
 
 public class NotificationTable {
 
-	private static final String SELECT_BYALERT_SQL = "SELECT `notifId`,`time`,`userId`,`alertId`,`title`,`text`,`acknowledged` FROM dirtNotification WHERE `alertId`=?";
+	private static final String SELECT_BYALERT_SQL = "SELECT `notifId`,`time`,`userId`,`alertId`,`typeId`,`title`,`text`,`acknowledged`,`sent` FROM dirtNotification WHERE `alertId`=?";
 	private static final String INSERT_SQL = "INSERT INTO dirtNotification ("
-			+ "`time`,`userId`,`alertId`,`title`,`text`,`acknowledged`) VALUES (?,?,?,?,?,?)";
+			+ "`time`,`userId`,`alertId`,`typeId`,`title`,`text`,`acknowledged`,`sent`) VALUES (?,?,?,?,?,?,?,?)";
 
 	public static List<Notification> getNotificationsByAlert(Connection db, int alertId) throws SQLException {
 		PreparedStatement stmt = db.prepareStatement(SELECT_BYALERT_SQL);
@@ -26,9 +26,11 @@ public class NotificationTable {
 			n.setTime(rs.getTimestamp(2));
 			n.setUserId(rs.getInt(3));
 			n.setAlertId(rs.getInt(4));
-			n.setTitle(rs.getString(5));
-			n.setText(rs.getString(6));
-			n.setAcknowledged(rs.getBoolean(7));
+			n.setTypeId(rs.getInt(5));
+			n.setTitle(rs.getString(6));
+			n.setText(rs.getString(7));
+			n.setAcknowledged(rs.getBoolean(8));
+			n.setSent(rs.getBoolean(9));
 			notifs.add(n);
 		}
 		return notifs;
@@ -39,9 +41,11 @@ public class NotificationTable {
 		stmt.setTimestamp(1, n.getTime());
 		stmt.setInt(2, n.getUserId());
 		stmt.setInt(3, n.getAlertId());
-		stmt.setString(4, n.getTitle());
-		stmt.setString(5, n.getText());
-		stmt.setBoolean(6, n.isAcknowledged());
+		stmt.setInt(4, n.getTypeId());
+		stmt.setString(5, n.getTitle());
+		stmt.setString(6, n.getText());
+		stmt.setBoolean(7, n.isAcknowledged());
+		stmt.setBoolean(8, n.isSent());
 		stmt.execute();
 	}
 

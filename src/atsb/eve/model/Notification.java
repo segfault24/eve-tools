@@ -7,12 +7,16 @@ public class Notification {
 	private int notifId;
 	private Timestamp time;
 	private int userId;
-	private int alertId;
+	private Integer alertId;
+	private Integer typeId;
 	private String title;
 	private String text;
 	private boolean acknowledged;
+	private boolean sent;
 
 	public Notification() {
+		acknowledged = false;
+		sent = false;
 	}
 
 	public int getNotifId() {
@@ -47,6 +51,14 @@ public class Notification {
 		this.alertId = alertId;
 	}
 
+	public int getTypeId() {
+		return typeId;
+	}
+
+	public void setTypeId(int typeId) {
+		this.typeId = typeId;
+	}
+
 	public String getTitle() {
 		return title;
 	}
@@ -69,6 +81,14 @@ public class Notification {
 
 	public void setAcknowledged(boolean acknowledged) {
 		this.acknowledged = acknowledged;
+	}
+
+	public boolean isSent() {
+		return sent;
+	}
+
+	public void setSent(boolean sent) {
+		this.sent = sent;
 	}
 
 }
