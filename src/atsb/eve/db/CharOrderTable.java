@@ -6,25 +6,25 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Collection;
 
-import atsb.eve.model.MarketOrder;
+import atsb.eve.model.CharOrder;
 
-public class MarketOrderTable {
+public class CharOrderTable {
 
-	private static final String UPSERT_SQL = "INSERT INTO marketOrder ("
+	private static final String UPSERT_SQL = "INSERT INTO charOrder ("
 			+ "`issued`,`range`,`isBuyOrder`,`duration`,`orderId`,`volumeRemain`,`minVolume`,"
-			+ "`typeId`,`volumeTotal`,`locationId`,`price`,`regionId`,`retrieved`"
-			+ ") VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE "
+			+ "`typeId`,`volumeTotal`,`locationId`,`price`,`regionId`,`retrieved`,`charId`"
+			+ ") VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE "
 			+ "`volumeRemain`=VALUES(`volumeRemain`),`price`=VALUES(`price`),"
 			+ "`retrieved`=VALUES(`retrieved`)";
-	private static final String DELETE_REGION_SQL = "DELETE FROM marketOrder WHERE `regionId`=? AND `retrieved`<?";
-	private static final String DELETE_SQL = "DELETE FROM marketOrder WHERE retrieved<?";
+	private static final String DELETE_CHARACTER_SQL = "DELETE FROM charOrder WHERE `charId`=? AND `retrieved`<?";
+	private static final String DELETE_SQL = "DELETE FROM charOrder WHERE retrieved<?";
 
 	private static final int BATCH_SIZE = 1000;
 
-	public static void upsertMany(Connection db, Collection<MarketOrder> os) throws SQLException {
+	public static void upsertMany(Connection db, Collection<CharOrder> os) throws SQLException {
 		PreparedStatement stmt = db.prepareStatement(UPSERT_SQL);
 		int count = 0;
-		for (MarketOrder o : os) {
+		for (CharOrder o : os) {
 			stmt.setTimestamp(1, o.getIssued());
 			stmt.setString(2, o.getRange());
 			stmt.setBoolean(3, o.isBuyOrder());
@@ -38,6 +38,7 @@ public class MarketOrderTable {
 			stmt.setDouble(11, o.getPrice());
 			stmt.setInt(12, o.getRegion());
 			stmt.setTimestamp(13, o.getRetrieved());
+			stmt.setInt(14, o.getCharId());
 			stmt.addBatch();
 			count++;
 			if (count % BATCH_SIZE == 0 || count == os.size()) {
@@ -46,9 +47,9 @@ public class MarketOrderTable {
 		}
 	}
 
-	public static int deleteOldOrdersByRegion(Connection db, int region, Timestamp olderThan) throws SQLException {
-		PreparedStatement stmt = db.prepareStatement(DELETE_REGION_SQL);
-		stmt.setInt(1, region);
+	public static int deleteOldOrdersByChar(Connection db, long charId, Timestamp olderThan) throws SQLException {
+		PreparedStatement stmt = db.prepareStatement(DELETE_CHARACTER_SQL);
+		stmt.setLong(1, charId);
 		stmt.setTimestamp(2, olderThan);
 		return stmt.executeUpdate();
 	}

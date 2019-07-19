@@ -2,7 +2,7 @@ package atsb.eve.model;
 
 import java.sql.Timestamp;
 
-public class MarketOrder {
+public class CharOrder {
 
 	private Timestamp issued;
 	private String range;
@@ -17,8 +17,9 @@ public class MarketOrder {
 	private double price;
 	private int region;
 	private Timestamp retrieved;
+	private int charId;
 
-	public MarketOrder() {
+	public CharOrder() {
 	}
 
 	public Timestamp getIssued() {
@@ -123,6 +124,14 @@ public class MarketOrder {
 
 	public void setRetrieved(Timestamp retrieved) {
 		this.retrieved = retrieved;
+	}
+
+	public int getCharId() {
+		return charId;
+	}
+
+	public void setCharId(int charId) {
+		this.charId = charId;
 	}
 
 }

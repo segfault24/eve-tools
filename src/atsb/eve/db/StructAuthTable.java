@@ -9,7 +9,7 @@ import java.util.List;
 
 public class StructAuthTable {
 
-	public static List<Integer> findAuthKeyByStruct(Connection db, long structId) throws SQLException {
+	public static List<Integer> getAuthKeyByStruct(Connection db, long structId) throws SQLException {
 		PreparedStatement stmt;
 		stmt = db.prepareStatement("SELECT keyId FROM dirtStructAuth WHERE structId=?");
 		stmt.setLong(1, structId);
@@ -21,9 +21,10 @@ public class StructAuthTable {
 		return keys;
 	}
 
-	public static List<Long> getAllUniqueStructs(Connection db) throws SQLException {
-		PreparedStatement stmt;
-		stmt = db.prepareStatement("SELECT DISTINCT structId FROM dirtStructAuth");
+	public static List<Long> getStructIdByRegion(Connection db, int regionId) throws SQLException {
+		PreparedStatement stmt = db.prepareStatement("SELECT DISTINCT d.structId FROM dirtStructAuth AS d "
+				+ "JOIN structure AS s ON d.structId=s.structId WHERE s.regionId=?");
+		stmt.setInt(1, regionId);
 		ResultSet rs = stmt.executeQuery();
 		ArrayList<Long> structs = new ArrayList<Long>();
 		while (rs.next()) {

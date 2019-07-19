@@ -359,6 +359,27 @@ CREATE TABLE `marketHistory` (
 
 DROP TABLE IF EXISTS `marketOrder`;
 CREATE TABLE `marketOrder` (
+	`issued` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	`range` VARCHAR(45),
+	`isBuyOrder` BOOLEAN,
+	`duration` INT,
+	`orderId` BIGINT NOT NULL,
+	`volumeRemain` INT,
+	`minVolume` INT,
+	`typeId` INT NOT NULL,
+	`volumeTotal` INT,
+	`locationId` BIGINT NOT NULL,
+	`price` DECIMAL(19,4),
+	`regionId` INT NOT NULL,
+	`retrieved` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	PRIMARY KEY (`orderId`),
+	KEY `ix_marketOrder_typeId_regionId` (`typeId`, `regionId`),
+	KEY `ix_marketOrder_locationId` (`locationId`),
+	KEY `ix_marketOrder_regionId` (`regionId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `charOrder`;
+CREATE TABLE `charOrder` (
 	`orderEntryId` BIGINT AUTO_INCREMENT,
 	`issued` TIMESTAMP,
 	`range` VARCHAR(45),
@@ -373,14 +394,10 @@ CREATE TABLE `marketOrder` (
 	`price` DECIMAL(19,4),
 	`regionId` INT NOT NULL,
 	`retrieved` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	-- source: 0=public, 1=structure, 2=character
-	`source` INT NOT NULL DEFAULT 0,
 	`charId` INT,
 	PRIMARY KEY (`orderEntryId`),
-	UNIQUE KEY `ux_marketOrder_orderId_retrieved` (`orderId`, `retrieved`),
-	KEY `ix_marketOrder_typeId_regionId` (`typeId`, `regionId`),
-	KEY `ix_marketOrder_locationId` (`locationId`),
-	KEY `ix_marketOrder_regionId` (`regionId`)
+	UNIQUE KEY `ux_charOrder_orderId` (`orderId`),
+	KEY `ix_charOrder_charId` (`charId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `insurancePrice`;
