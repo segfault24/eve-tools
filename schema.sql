@@ -357,6 +357,17 @@ CREATE TABLE `marketHistory` (
 	KEY `ix_marketHistory_typeId_regionId` (`typeId`, `regionId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `marketStat`;
+CREATE TABLE `marketStat` (
+	`statId` INT AUTO_INCREMENT,
+	`regionId` INT NOT NULL,
+	`typeId` INT NOT NULL,
+	`ma30` BIGINT(20),
+	`ma90` BIGINT(20),
+	PRIMARY KEY (`statId`),
+	UNIQUE KEY `ux_marketStat_regionId_typeId` (`regionId`, `typeId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 DROP TABLE IF EXISTS `marketOrder`;
 CREATE TABLE `marketOrder` (
 	`issued` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
