@@ -15,7 +15,7 @@ public class MarketOrderTable {
 			+ "`typeId`,`volumeTotal`,`locationId`,`price`,`regionId`,`retrieved`"
 			+ ") VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE "
 			+ "`volumeRemain`=VALUES(`volumeRemain`),`price`=VALUES(`price`),"
-			+ "`retrieved`=VALUES(`retrieved`)";
+			+ "`retrieved`=VALUES(`retrieved`),`issued`=VALUES(`issued`)";
 	private static final String DELETE_REGION_SQL = "DELETE FROM marketOrder WHERE `regionId`=? AND `retrieved`<?";
 	private static final String DELETE_SQL = "DELETE FROM marketOrder WHERE retrieved<?";
 

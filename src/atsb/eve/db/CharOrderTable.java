@@ -15,7 +15,7 @@ public class CharOrderTable {
 			+ "`typeId`,`volumeTotal`,`locationId`,`price`,`regionId`,`retrieved`,`charId`"
 			+ ") VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE "
 			+ "`volumeRemain`=VALUES(`volumeRemain`),`price`=VALUES(`price`),"
-			+ "`retrieved`=VALUES(`retrieved`)";
+			+ "`retrieved`=VALUES(`retrieved`),`issued`=VALUES(`issued`)";
 	private static final String DELETE_CHARACTER_SQL = "DELETE FROM charOrder WHERE `charId`=? AND `retrieved`<?";
 	private static final String DELETE_SQL = "DELETE FROM charOrder WHERE retrieved<?";
 

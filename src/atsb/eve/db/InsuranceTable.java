@@ -10,7 +10,7 @@ import atsb.eve.util.Utils;
 
 public class InsuranceTable {
 
-	private static String DELETE_SQL = "TRUNCATE TABLE `insurancePrice`";
+	private static String DELETE_SQL = "DELETE FROM `insurancePrice`";
 	private static String INSERT_SQL = "INSERT INTO insurancePrice (`typeId`,`name`,`cost`,`payout`) VALUES (?,?,?,?)";
 
 	public static void insertMany(Connection db, Collection<InsurancePrice> prices) throws SQLException {
