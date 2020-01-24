@@ -165,7 +165,8 @@ CREATE TABLE `dirtUser` (
 	`lastLogin` TIMESTAMP NOT NULL,
 	`admin` BOOLEAN NOT NULL DEFAULT FALSE,
 	`disabled` BOOLEAN NOT NULL DEFAULT FALSE,
-	PRIMARY KEY (`userId`)
+	PRIMARY KEY (`userId`),
+	UNIQUE KEY `ux_dirtUser_username` (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `dirtList`;
@@ -259,10 +260,8 @@ CREATE TABLE `dirtNotification` (
 	FOREIGN KEY (`userId`)
 		REFERENCES `dirtUser`(`userId`)
 		ON DELETE CASCADE,
-	FOREIGN KEY (`alertId`)
-		REFERENCES `dirtAlert`(`alertId`)
-		ON DELETE SET NULL,
-	KEY `ix_dirtNotification_userId` (`userId`)
+	KEY `ix_dirtNotification_userId` (`userId`),
+	KEY `ix_dirtNotification_alertId` (`alertId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `fortchain`;
@@ -332,7 +331,7 @@ CREATE TABLE `contract` (
 	`assigneeId` INT NOT NULL,
 	`acceptorId` INT NOT NULL,
 	`availability` VARCHAR(255),
-	`dateIssued` TIMESTAMP NOT NULL,
+	`dateIssued` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	`dateExpired` TIMESTAMP NOT NULL,
 	`status` VARCHAR(255),
 	`type` VARCHAR(255),

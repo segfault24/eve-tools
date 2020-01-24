@@ -4,6 +4,18 @@ import java.sql.Timestamp;
 
 public class Contract {
 
+	public static final String STATUS_OUTSTANDING = "outstanding";
+	public static final String STATUS_IN_PROGRESS = "in_progress";
+	public static final String STATUS_FINISHED = "finished";
+	public static final String STATUS_CANCELLED = "cancelled";
+	public static final String STATUS_REJECTED = "rejected";
+	public static final String STATUS_FAILED = "failed";
+	public static final String STATUS_DELETED = "deleted";
+
+	public static final String TYPE_ITEM_EXCHANGE = "item_exchange";
+	public static final String TYPE_COURIER = "courier";
+	public static final String TYPE_AUCTION = "auction";
+
 	private int contractId;
 	private int issuerId;
 	private int issuerCorpId;

@@ -7,8 +7,8 @@ public class Notification {
 	private int notifId;
 	private Timestamp time;
 	private int userId;
-	private Integer alertId;
-	private Integer typeId;
+	private int alertId;
+	private int typeId;
 	private String title;
 	private String text;
 	private boolean acknowledged;
@@ -17,6 +17,8 @@ public class Notification {
 	public Notification() {
 		acknowledged = false;
 		sent = false;
+		alertId = -1;
+		typeId = -1;
 	}
 
 	public int getNotifId() {

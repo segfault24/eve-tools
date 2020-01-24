@@ -17,13 +17,13 @@ import atsb.eve.util.Utils;
  */
 public class ApiAuthTable {
 
-	private static final String BYKEYID_SELECT_SQL = "SELECT `charId`,`token`,`expires`,`refresh` FROM dirtApiAuth WHERE `keyId`=?;";
-	private static final String BYCHARID_SELECT_SQL = "SELECT `keyId`,`token`,`expires`,`refresh` FROM dirtApiAuth WHERE `charId`=?;";
+	private static final String SELECT_BYKEYID_SQL = "SELECT `userId`,`charId`,`token`,`expires`,`refresh` FROM dirtApiAuth WHERE `keyId`=?;";
+	private static final String SELECT_BYCHARID_SQL = "SELECT `keyId`,`userId`,`token`,`expires`,`refresh` FROM dirtApiAuth WHERE `charId`=?;";
 	private static final String SELECT_ALL_SQL = "SELECT `charId` FROM dirtApiAuth";
 	private static final String UPDATE_SQL = "UPDATE dirtApiAuth SET `token`=?, `expires`=?, `refresh`=? WHERE `keyId`=?;";
 
 	public static OAuthUser getUserByKeyId(Connection db, int keyId) throws SQLException {
-		PreparedStatement stmt = db.prepareStatement(BYKEYID_SELECT_SQL);
+		PreparedStatement stmt = db.prepareStatement(SELECT_BYKEYID_SQL);
 		stmt.setInt(1, keyId);
 		ResultSet rs = stmt.executeQuery();
 
@@ -31,6 +31,7 @@ public class ApiAuthTable {
 		if (rs.next()) {
 			oau = new OAuthUser();
 			oau.setKeyId(keyId);
+			oau.setUserId(rs.getInt("userId"));
 			oau.setCharId(rs.getInt("charId"));
 			oau.setAuthToken(rs.getString("token"));
 			oau.setTokenExpires(rs.getTimestamp("expires"));
@@ -44,7 +45,7 @@ public class ApiAuthTable {
 	}
 
 	public static OAuthUser getUserByCharId(Connection db, int charId) throws SQLException {
-		PreparedStatement stmt = db.prepareStatement(BYCHARID_SELECT_SQL);
+		PreparedStatement stmt = db.prepareStatement(SELECT_BYCHARID_SQL);
 		stmt.setInt(1, charId);
 		ResultSet rs = stmt.executeQuery();
 
@@ -52,6 +53,7 @@ public class ApiAuthTable {
 		if (rs.next()) {
 			oau = new OAuthUser();
 			oau.setKeyId(rs.getInt("keyId"));
+			oau.setUserId(rs.getInt("userId"));
 			oau.setCharId(charId);
 			oau.setAuthToken(rs.getString("token"));
 			oau.setTokenExpires(rs.getTimestamp("expires"));
