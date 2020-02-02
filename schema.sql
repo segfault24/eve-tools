@@ -338,6 +338,21 @@ CREATE TABLE `contract` (
 	PRIMARY KEY (`contractId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `corpContract`;
+CREATE TABLE `corpContract` (
+	`contractId` INT NOT NULL,
+	`issuerId` INT NOT NULL,
+	`issuerCorpId` INT NOT NULL,
+	`assigneeId` INT NOT NULL,
+	`acceptorId` INT NOT NULL,
+	`availability` VARCHAR(255),
+	`dateIssued` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	`dateExpired` TIMESTAMP NOT NULL,
+	`status` VARCHAR(255),
+	`type` VARCHAR(255),
+	PRIMARY KEY (`contractId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 -- -----------------------------------------------------------------------------
 
 DROP TABLE IF EXISTS `marketHistory`;
