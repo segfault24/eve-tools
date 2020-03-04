@@ -19,6 +19,7 @@ public class ApiAuthTable {
 
 	private static final String SELECT_BYKEYID_SQL = "SELECT `userId`,`charId`,`token`,`expires`,`refresh` FROM dirtApiAuth WHERE `keyId`=?;";
 	private static final String SELECT_BYCHARID_SQL = "SELECT `keyId`,`userId`,`token`,`expires`,`refresh` FROM dirtApiAuth WHERE `charId`=?;";
+	private static final String SELECT_BYUSERID_SQL = "SELECT `charId` FROM dirtApiAuth WHERE `userId`=?;";
 	private static final String SELECT_ALL_SQL = "SELECT `charId` FROM dirtApiAuth";
 	private static final String UPDATE_SQL = "UPDATE dirtApiAuth SET `token`=?, `expires`=?, `refresh`=? WHERE `keyId`=?;";
 
@@ -68,6 +69,22 @@ public class ApiAuthTable {
 
 	public static List<Integer> getAllCharacters(Connection db) throws SQLException {
 		PreparedStatement stmt = db.prepareStatement(SELECT_ALL_SQL);
+		ResultSet rs = stmt.executeQuery();
+
+		List<Integer> charIds = new ArrayList<Integer>();
+		while (rs.next()) {
+			charIds.add(rs.getInt("charId"));
+		}
+
+		Utils.closeQuietly(rs);
+		Utils.closeQuietly(stmt);
+
+		return charIds;
+	}
+
+	public static List<Integer> getCharsByUserId(Connection db, int userId) throws SQLException {
+		PreparedStatement stmt = db.prepareStatement(SELECT_BYUSERID_SQL);
+		stmt.setInt(1, userId);
 		ResultSet rs = stmt.executeQuery();
 
 		List<Integer> charIds = new ArrayList<Integer>();

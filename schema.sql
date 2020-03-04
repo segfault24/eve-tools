@@ -3,7 +3,7 @@
 --
 -- tables and columns are named in camelCase
 -- indices are named in the following convention:
---   px_<table>_<col>			  primary KEY (single column, sometimes on surrogate indices)
+--   px_<table>_<col>              primary KEY (single column, sometimes on surrogate indices)
 --   fx_<table>_<col1>_<col2>_...  foreign indices (constrain to other tables)
 --   ux_<table>_<col1>_<col2>_...  unique indices (constraints on this table)
 --   ix_<table>_<col1>_<col2>_...  alternative indices (faster operations)
@@ -323,34 +323,146 @@ CREATE TABLE `walletTransaction` (
 	KEY `ix_walletTransaction_charId` (`charId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- -----------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `corpContractItem`;
+DROP TABLE IF EXISTS `corpContract`;
+DROP TABLE IF EXISTS `contractItem`;
 DROP TABLE IF EXISTS `contract`;
+DROP TABLE IF EXISTS `contractType`;
+DROP TABLE IF EXISTS `contractStatus`;
+DROP TABLE IF EXISTS `contractAvailability`;
+
+CREATE TABLE `contractType` (
+	`id` INT NOT NULL,
+	`value` VARCHAR(255) NOT NULL,
+	PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+INSERT INTO `contractType` (`id`,`value`) VALUES (1,"Unknown");
+INSERT INTO `contractType` (`id`,`value`) VALUES (2,"Item Exchange");
+INSERT INTO `contractType` (`id`,`value`) VALUES (3,"Auction");
+INSERT INTO `contractType` (`id`,`value`) VALUES (4,"Courier");
+INSERT INTO `contractType` (`id`,`value`) VALUES (5,"Loan");
+
+CREATE TABLE `contractStatus` (
+	`id` INT NOT NULL,
+	`value` VARCHAR(255) NOT NULL,
+	PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+INSERT INTO `contractStatus` (`id`,`value`) VALUES (1,"Outstanding");
+INSERT INTO `contractStatus` (`id`,`value`) VALUES (2,"In Progress");
+INSERT INTO `contractStatus` (`id`,`value`) VALUES (3,"Finished Issuer");
+INSERT INTO `contractStatus` (`id`,`value`) VALUES (4,"Finished Contractor");
+INSERT INTO `contractStatus` (`id`,`value`) VALUES (5,"Finished");
+INSERT INTO `contractStatus` (`id`,`value`) VALUES (6,"Cancelled");
+INSERT INTO `contractStatus` (`id`,`value`) VALUES (7,"Rejected");
+INSERT INTO `contractStatus` (`id`,`value`) VALUES (8,"Failed");
+INSERT INTO `contractStatus` (`id`,`value`) VALUES (9,"Deleted");
+INSERT INTO `contractStatus` (`id`,`value`) VALUES (10,"Reversed");
+INSERT INTO `contractStatus` (`id`,`value`) VALUES (11,"Unknown");
+
+CREATE TABLE `contractAvailability` (
+	`id` INT NOT NULL,
+	`value` VARCHAR(255) NOT NULL,
+	PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+INSERT INTO `contractAvailability` (`id`,`value`) VALUES (1,"Public");
+INSERT INTO `contractAvailability` (`id`,`value`) VALUES (2,"Personal");
+INSERT INTO `contractAvailability` (`id`,`value`) VALUES (3,"Corporation");
+INSERT INTO `contractAvailability` (`id`,`value`) VALUES (4,"Alliance");
+
 CREATE TABLE `contract` (
 	`contractId` INT NOT NULL,
+	`type` INT NOT NULL,
+	`status` INT NOT NULL,
+	`availability` INT NOT NULL,
 	`issuerId` INT NOT NULL,
 	`issuerCorpId` INT NOT NULL,
+	`forCorp` BOOLEAN,
 	`assigneeId` INT NOT NULL,
 	`acceptorId` INT NOT NULL,
-	`availability` VARCHAR(255),
 	`dateIssued` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	`dateExpired` TIMESTAMP NOT NULL,
-	`status` VARCHAR(255),
-	`type` VARCHAR(255),
-	PRIMARY KEY (`contractId`)
+	`dateAccepted` TIMESTAMP,
+	`dateCompleted` TIMESTAMP,
+	`title` VARCHAR(255),
+	`price` DECIMAL(19,4),
+	`startLocationId` BIGINT,
+	`endLocationId` BIGINT,
+	`daysToComplete` INT,
+	`reward` DECIMAL(19,4),
+	`collateral` DECIMAL(19,4),
+	`buyout` DECIMAL(19,4),
+	`volume` DECIMAL(19,4),
+	PRIMARY KEY (`contractId`),
+	FOREIGN KEY (`type`)
+		REFERENCES `contractType`(`id`),
+	FOREIGN KEY (`status`)
+		REFERENCES `contractStatus`(`id`),
+	FOREIGN KEY (`availability`)
+		REFERENCES `contractAvailability`(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `corpContract`;
+CREATE TABLE `contractItem` (
+	`contractItemId` INT AUTO_INCREMENT,
+	`contractId` INT NOT NULL,
+	`typeId` INT NOT NULL,
+	`quantity` INT NOT NULL,
+	`recordId` BIGINT NOT NULL,
+	`included` BOOLEAN NOT NULL,
+	`singleton` BOOLEAN NOT NULL,
+	PRIMARY KEY (`contractItemId`),
+	FOREIGN KEY (`contractId`)
+		REFERENCES `contract`(`contractId`)
+		ON DELETE CASCADE,
+	KEY `ix_contractItem_contractId` (`contractId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 CREATE TABLE `corpContract` (
 	`contractId` INT NOT NULL,
+	`type` INT NOT NULL,
+	`status` INT NOT NULL,
+	`availability` INT NOT NULL,
 	`issuerId` INT NOT NULL,
 	`issuerCorpId` INT NOT NULL,
+	`forCorp` BOOLEAN,
 	`assigneeId` INT NOT NULL,
 	`acceptorId` INT NOT NULL,
-	`availability` VARCHAR(255),
 	`dateIssued` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	`dateExpired` TIMESTAMP NOT NULL,
-	`status` VARCHAR(255),
-	`type` VARCHAR(255),
-	PRIMARY KEY (`contractId`)
+	`dateAccepted` TIMESTAMP,
+	`dateCompleted` TIMESTAMP,
+	`title` VARCHAR(255),
+	`price` DECIMAL(19,4),
+	`startLocationId` BIGINT,
+	`endLocationId` BIGINT,
+	`daysToComplete` INT,
+	`reward` DECIMAL(19,4),
+	`collateral` DECIMAL(19,4),
+	`buyout` DECIMAL(19,4),
+	`volume` DECIMAL(19,4),
+	PRIMARY KEY (`contractId`),
+	FOREIGN KEY (`type`)
+		REFERENCES `contractType`(`id`),
+	FOREIGN KEY (`status`)
+		REFERENCES `contractStatus`(`id`),
+	FOREIGN KEY (`availability`)
+		REFERENCES `contractAvailability`(`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `corpContractItem` (
+	`contractItemId` INT AUTO_INCREMENT,
+	`contractId` INT NOT NULL,
+	`typeId` INT NOT NULL,
+	`quantity` INT NOT NULL,
+	`recordId` BIGINT NOT NULL,
+	`included` BOOLEAN NOT NULL,
+	`singleton` BOOLEAN NOT NULL,
+	PRIMARY KEY (`contractItemId`),
+	FOREIGN KEY (`contractId`)
+		REFERENCES `corpContract`(`contractId`)
+		ON DELETE CASCADE,
+	KEY `ix_corpContractItem_contractId` (`contractId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- -----------------------------------------------------------------------------
