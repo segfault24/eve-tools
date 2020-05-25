@@ -197,6 +197,18 @@ CREATE TABLE `dirtListItem` (
 	UNIQUE KEY (`listId` , `typeId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE `doctrine` (
+	`doctrine` INT AUTO_INCREMENT,
+	`listId` INT NOT NULL,
+	`locationId` BIGINT NOT NULL,
+	`quantity` INT NOT NULL,
+	`target` INT NOT NULL,
+	PRIMARY KEY (`doctrine`),
+	FOREIGN KEY (`listId`)
+		REFERENCES `dirtList` (`listId`)
+		ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 DROP TABLE IF EXISTS `dirtApiAuth`;
 CREATE TABLE `dirtApiAuth` (
 	`keyId` INT AUTO_INCREMENT,
@@ -271,13 +283,17 @@ CREATE TABLE `fortchain` (
 	PRIMARY KEY (`systemId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `taskStatus`;
-CREATE TABLE `taskStatus` (
-	`taskName` VARCHAR(255),
-	`lastRun` TIMESTAMP,
-	`lastRunDuration` INT,
-	PRIMARY KEY (`taskName`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE `taskLog` (
+	`taskLogId` INT AUTO_INCREMENT,
+	`taskName` VARCHAR(255) NOT NULL,
+	`startTime` timestamp NOT NULL,
+	`finishTime` timestamp NOT NULL,
+	`duration` int(11) NOT NULL,
+	`success` boolean NOT NULL DEFAULT FALSE,
+	`error` varchar(255),
+	PRIMARY KEY (`taskLogId`),
+	KEY `ix_taskLog_taskName` (`taskName`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
 
 DROP TABLE IF EXISTS `apiReq`;
 CREATE TABLE `apiReq` (
