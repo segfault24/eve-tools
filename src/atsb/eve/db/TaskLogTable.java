@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import atsb.eve.model.TaskLog;
+import atsb.eve.util.Utils;
 
 public class TaskLogTable {
 
@@ -20,12 +21,15 @@ public class TaskLogTable {
 	 * @return
 	 */
 	public static TaskLog getLatestTaskLog(Connection db, String taskName) {
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		TaskLog t = null;
 		try {
-			PreparedStatement stmt = db.prepareStatement(SELECT_LATEST_TASK_SQL);
+			stmt = db.prepareStatement(SELECT_LATEST_TASK_SQL);
 			stmt.setString(1, taskName);
-			ResultSet rs = stmt.executeQuery();
+			rs = stmt.executeQuery();
 			if (rs.next()) {
-				TaskLog t = new TaskLog();
+				t = new TaskLog();
 				t.setTaskLogId(rs.getInt(1));
 				t.setTaskName(taskName);
 				t.setStartTime(rs.getTimestamp(3));
@@ -33,13 +37,14 @@ public class TaskLogTable {
 				t.setDuration(rs.getInt(5));
 				t.setSuccess(rs.getBoolean(6));
 				t.setError(rs.getString(7));
-				return t;
-			} else {
-				return null;
 			}
 		} catch (SQLException e) {
-			return null;
+			t = null;
+		} finally {
+			Utils.closeQuietly(rs);
+			Utils.closeQuietly(stmt);
 		}
+		return t;
 	}
 
 	/**
@@ -58,6 +63,7 @@ public class TaskLogTable {
 		stmt.setBoolean(5, taskLog.isSuccess());
 		stmt.setString(6, taskLog.getError());
 		stmt.execute();
+		Utils.closeQuietly(stmt);
 	}
 
 }

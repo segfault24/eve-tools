@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
+import atsb.eve.util.Utils;
+
 public class ListItemTable {
 
 	private static final String SELECT_BY_ID_SQL = "SELECT `typeId`,`quantity` FROM dirtListItem WHERE `listId`=?";
@@ -25,6 +27,8 @@ public class ListItemTable {
 				items.put(typeId, quantity);
 			}
 		}
+		Utils.closeQuietly(rs);
+		Utils.closeQuietly(stmt);
 		return items;
 	}
 

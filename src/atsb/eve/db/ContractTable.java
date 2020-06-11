@@ -10,6 +10,7 @@ import atsb.eve.model.Contract;
 import atsb.eve.model.Contract.ContractAvailability;
 import atsb.eve.model.Contract.ContractStatus;
 import atsb.eve.model.Contract.ContractType;
+import atsb.eve.util.Utils;
 
 public class ContractTable {
 
@@ -34,8 +35,9 @@ public class ContractTable {
 		PreparedStatement stmt = db.prepareStatement(SELECT_SQL);
 		stmt.setInt(1, contractId);
 		ResultSet rs = stmt.executeQuery();
+		Contract c = null;
 		if (rs.next()) {
-			Contract c = new Contract();
+			c = new Contract();
 			c.setContractId(rs.getInt(1));
 			c.setIssuerId(rs.getInt(2));
 			c.setIssuerCorpId(rs.getInt(3));
@@ -58,10 +60,10 @@ public class ContractTable {
 			c.setCollateral(rs.getDouble(20));
 			c.setBuyout(rs.getDouble(21));
 			c.setVolume(rs.getDouble(22));
-			return c;
-		} else {
-			return null;
 		}
+		Utils.closeQuietly(rs);
+		Utils.closeQuietly(stmt);
+		return c;
 	}
 
 	public static void upsertMany(Connection db, List<Contract> l) throws SQLException {
@@ -96,6 +98,7 @@ public class ContractTable {
 				stmt.executeBatch();
 			}
 		}
+		Utils.closeQuietly(stmt);
 	}
 
 }

@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import atsb.eve.model.Structure;
+import atsb.eve.util.Utils;
 
 public class StructureTable {
 
@@ -24,28 +25,33 @@ public class StructureTable {
 		stmt.setInt(5, s.getRegionId());
 		stmt.setInt(6, s.getTypeId());
 		stmt.execute();
+		Utils.closeQuietly(stmt);
 	}
 
 	public static Structure find(Connection db, long structId) {
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		Structure s = null;
 		try {
-			PreparedStatement stmt = db.prepareStatement(SELECT_SQL);
+			stmt = db.prepareStatement(SELECT_SQL);
 			stmt.setLong(1, structId);
-			ResultSet rs = stmt.executeQuery();
+			rs = stmt.executeQuery();
 			if (rs.next()) {
-				Structure s = new Structure();
+				s = new Structure();
 				s.setStructId(structId);
 				s.setStructName(rs.getString(2));
 				s.setCorpId(rs.getInt(3));
 				s.setSystemId(rs.getInt(4));
 				s.setRegionId(rs.getInt(5));
 				s.setTypeId(rs.getInt(6));
-				return s;
-			} else {
-				return null;
 			}
 		} catch (SQLException e) {
-			return null;
+			s = null;
+		} finally {
+			Utils.closeQuietly(rs);
+			Utils.closeQuietly(stmt);
 		}
+		return s;
 	}
 
 }

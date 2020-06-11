@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import atsb.eve.model.WalletTransaction;
+import atsb.eve.util.Utils;
 
 public class WalletTransactionTable {
 
@@ -14,25 +15,30 @@ public class WalletTransactionTable {
 	private static final String LATEST_SELECT_SQL = "SELECT `transactionId` FROM `walletTransaction` WHERE `charId`=? ORDER BY `date` DESC LIMIT 1;";
 
 	public static long getLatestTransactionId(Connection db, int charId) {
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		long retval = 0;
 		try {
-			PreparedStatement stmt;
 			stmt = db.prepareStatement(LATEST_SELECT_SQL);
 			stmt.setInt(1, charId);
-			ResultSet rs = stmt.executeQuery();
+			rs = stmt.executeQuery();
 			if (rs.next()) {
-				return rs.getLong(1);
-			} else {
-				return 0;
+				retval = rs.getLong(1);
 			}
 		} catch (SQLException e) {
-			return 0;
+			retval = 0;
+		} finally {
+			Utils.closeQuietly(rs);
+			Utils.closeQuietly(stmt);
 		}
+		return retval;
 	}
 
 	public static boolean insertMany(Connection db, List<WalletTransaction> ts) {
 		boolean result = true;
+		PreparedStatement stmt = null;
 		try {
-			PreparedStatement stmt = db.prepareStatement(INSERT_IGNORE_SQL);
+			stmt = db.prepareStatement(INSERT_IGNORE_SQL);
 			for (WalletTransaction t : ts) {
 				stmt.setLong(1, t.getTransactionId());
 				stmt.setInt(2, t.getCharId());
@@ -57,6 +63,8 @@ public class WalletTransactionTable {
 			}
 		} catch (SQLException e) {
 			result = false;
+		} finally {
+			Utils.closeQuietly(stmt);
 		}
 		return result;
 	}

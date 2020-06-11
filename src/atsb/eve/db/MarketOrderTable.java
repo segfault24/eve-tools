@@ -7,6 +7,7 @@ import java.sql.Timestamp;
 import java.util.Collection;
 
 import atsb.eve.model.MarketOrder;
+import atsb.eve.util.Utils;
 
 public class MarketOrderTable {
 
@@ -44,19 +45,24 @@ public class MarketOrderTable {
 				stmt.executeBatch();
 			}
 		}
+		Utils.closeQuietly(stmt);
 	}
 
 	public static int deleteOldOrdersByRegion(Connection db, int region, Timestamp olderThan) throws SQLException {
 		PreparedStatement stmt = db.prepareStatement(DELETE_REGION_SQL);
 		stmt.setInt(1, region);
 		stmt.setTimestamp(2, olderThan);
-		return stmt.executeUpdate();
+		int retval = stmt.executeUpdate();
+		Utils.closeQuietly(stmt);
+		return retval;
 	}
 
 	public static int deleteOldOrders(Connection db, Timestamp olderThan) throws SQLException {
 		PreparedStatement stmt = db.prepareStatement(DELETE_SQL);
 		stmt.setTimestamp(1, olderThan);
-		return stmt.executeUpdate();
+		int retval = stmt.executeUpdate();
+		Utils.closeQuietly(stmt);
+		return retval;
 	}
 
 }

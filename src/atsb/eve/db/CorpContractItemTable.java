@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import atsb.eve.model.ContractItem;
+import atsb.eve.util.Utils;
 
 public class CorpContractItemTable {
 
@@ -24,6 +25,7 @@ public class CorpContractItemTable {
 		PreparedStatement stmt = db.prepareStatement(DELETE_SQL);
 		stmt.setInt(1, contractId);
 		stmt.execute();
+		Utils.closeQuietly(stmt);
 	}
 
 	public static  List<ContractItem> selectByContractId(Connection db, int contractId) throws SQLException {
@@ -41,6 +43,8 @@ public class CorpContractItemTable {
 			i.setSingleton(rs.getBoolean(6));
 			items.add(i);
 		}
+		Utils.closeQuietly(rs);
+		Utils.closeQuietly(stmt);
 		return items;
 	}
 
@@ -56,6 +60,7 @@ public class CorpContractItemTable {
 			stmt.addBatch();
 		}
 		stmt.executeBatch();
+		Utils.closeQuietly(stmt);
 	}
 
 }

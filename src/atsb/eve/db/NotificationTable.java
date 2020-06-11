@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import atsb.eve.model.Notification;
+import atsb.eve.util.Utils;
 
 public class NotificationTable {
 
@@ -33,6 +34,8 @@ public class NotificationTable {
 			n.setSent(rs.getBoolean(9));
 			notifs.add(n);
 		}
+		Utils.closeQuietly(rs);
+		Utils.closeQuietly(stmt);
 		return notifs;
 	}
 
@@ -47,6 +50,7 @@ public class NotificationTable {
 		stmt.setBoolean(7, n.isAcknowledged());
 		stmt.setBoolean(8, n.isSent());
 		stmt.execute();
+		Utils.closeQuietly(stmt);
 	}
 
 }

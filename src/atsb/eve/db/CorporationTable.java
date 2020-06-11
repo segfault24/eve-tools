@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import atsb.eve.model.Corporation;
+import atsb.eve.util.Utils;
 
 public class CorporationTable {
 
@@ -29,6 +30,7 @@ public class CorporationTable {
 		stmt.setDouble(9, s.getTaxRate());
 		stmt.setString(10, s.getUrl());
 		stmt.execute();
+		Utils.closeQuietly(stmt);
 	}
 
 	public static List<Integer> getAllIds(Connection db) throws SQLException {
@@ -38,6 +40,8 @@ public class CorporationTable {
 		while (rs.next()) {
 			ids.add(rs.getInt(1));
 		}
+		Utils.closeQuietly(rs);
+		Utils.closeQuietly(stmt);
 		return ids;
 	}
 

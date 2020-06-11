@@ -7,6 +7,7 @@ import java.sql.Timestamp;
 import java.util.Collection;
 
 import atsb.eve.model.CharOrder;
+import atsb.eve.util.Utils;
 
 public class CharOrderTable {
 
@@ -45,19 +46,24 @@ public class CharOrderTable {
 				stmt.executeBatch();
 			}
 		}
+		Utils.closeQuietly(stmt);
 	}
 
 	public static int deleteOldOrdersByChar(Connection db, long charId, Timestamp olderThan) throws SQLException {
 		PreparedStatement stmt = db.prepareStatement(DELETE_CHARACTER_SQL);
 		stmt.setLong(1, charId);
 		stmt.setTimestamp(2, olderThan);
-		return stmt.executeUpdate();
+		int retval = stmt.executeUpdate();
+		Utils.closeQuietly(stmt);
+		return retval;
 	}
 
 	public static int deleteOldOrders(Connection db, Timestamp olderThan) throws SQLException {
 		PreparedStatement stmt = db.prepareStatement(DELETE_SQL);
 		stmt.setTimestamp(1, olderThan);
-		return stmt.executeUpdate();
+		int retval = stmt.executeUpdate();
+		Utils.closeQuietly(stmt);
+		return retval;
 	}
 
 }

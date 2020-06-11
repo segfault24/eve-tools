@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import atsb.eve.model.InvType;
+import atsb.eve.util.Utils;
 
 public class InvTypeTable {
 
@@ -29,6 +30,8 @@ public class InvTypeTable {
 		while (rs.next()) {
 			types.add(rs.getInt(1));
 		}
+		Utils.closeQuietly(rs);
+		Utils.closeQuietly(stmt);
 		return types;
 	}
 
@@ -36,8 +39,9 @@ public class InvTypeTable {
 		PreparedStatement stmt = db.prepareStatement(SELECT_BY_ID_SQL);
 		stmt.setInt(1, i);
 		ResultSet rs = stmt.executeQuery();
+		InvType t = null;
 		if (rs.next()) {
-			InvType t = new InvType();
+			t = new InvType();
 			t.setTypeId(rs.getInt(1));
 			t.setGroupId(rs.getInt(2));
 			t.setTypeName(rs.getString(3));
@@ -46,10 +50,10 @@ public class InvTypeTable {
 			t.setVolume(rs.getDouble(6));
 			t.setPublished(rs.getBoolean(7));
 			t.setMarketGroupId(rs.getInt(8));
-			return t;
-		} else {
-			return null;
 		}
+		Utils.closeQuietly(rs);
+		Utils.closeQuietly(stmt);
+		return t;
 	}
 
 	public static void upsert(Connection db, InvType i) throws SQLException {
@@ -63,12 +67,14 @@ public class InvTypeTable {
 		stmt.setBoolean(7, i.isPublished());
 		stmt.setInt(8, i.getMarketGroupId());
 		stmt.execute();
+		Utils.closeQuietly(stmt);
 	}
 
 	public static void delete(Connection db, InvType i) throws SQLException {
 		PreparedStatement stmt = db.prepareStatement("DELETE FROM invType WHERE typeId=?");
 		stmt.setInt(1, i.getTypeId());
 		stmt.execute();
+		Utils.closeQuietly(stmt);
 	}
 
 	public static List<Integer> getMarketableTypeIds(Connection db) throws SQLException {
@@ -78,6 +84,8 @@ public class InvTypeTable {
 		while (rs.next()) {
 			typeIds.add(rs.getInt("typeId"));
 		}
+		Utils.closeQuietly(rs);
+		Utils.closeQuietly(stmt);
 		return typeIds;
 	}
 

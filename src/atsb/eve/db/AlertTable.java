@@ -9,6 +9,7 @@ import java.util.List;
 
 import atsb.eve.model.Alert;
 import atsb.eve.model.Alert.AlertType;
+import atsb.eve.util.Utils;
 
 public class AlertTable {
 
@@ -32,6 +33,8 @@ public class AlertTable {
 			a.setParam5(rs.getString(9));
 			alerts.add(a);
 		}
+		Utils.closeQuietly(rs);
+		Utils.closeQuietly(stmt);
 		return alerts;
 	}
 
@@ -53,6 +56,8 @@ public class AlertTable {
 			a.setParam5(rs.getString(9));
 			alerts.add(a);
 		}
+		Utils.closeQuietly(rs);
+		Utils.closeQuietly(stmt);
 		return alerts;
 	}
 

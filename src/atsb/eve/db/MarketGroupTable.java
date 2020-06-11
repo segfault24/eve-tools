@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import atsb.eve.model.MarketGroup;
+import atsb.eve.util.Utils;
 
 public class MarketGroupTable {
 
@@ -25,6 +26,8 @@ public class MarketGroupTable {
 		while (rs.next()) {
 			types.add(rs.getInt(1));
 		}
+		Utils.closeQuietly(rs);
+		Utils.closeQuietly(stmt);
 		return types;
 	}
 
@@ -36,12 +39,14 @@ public class MarketGroupTable {
 		stmt.setString(4, g.getDescription());
 		stmt.setBoolean(5, g.hasTypes());
 		stmt.execute();
+		Utils.closeQuietly(stmt);
 	}
 
 	public static void delete(Connection db, MarketGroup g) throws SQLException {
 		PreparedStatement stmt = db.prepareStatement("DELETE FROM marketGroup WHERE marketGroupId=?");
 		stmt.setInt(1, g.getMarketGroupId());
 		stmt.execute();
+		Utils.closeQuietly(stmt);
 	}
 
 }

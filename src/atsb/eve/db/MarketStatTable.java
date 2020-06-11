@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.Collection;
 
 import atsb.eve.model.MarketStat;
+import atsb.eve.util.Utils;
 
 public class MarketStatTable {
 
@@ -22,6 +23,7 @@ public class MarketStatTable {
 		stmt.setLong(3, s.getMa30());
 		stmt.setLong(4, s.getMa90());
 		stmt.execute();
+		Utils.closeQuietly(stmt);
 	}
 
 	public static void upsertMany(Connection db, Collection<MarketStat> ss) throws SQLException {
@@ -38,6 +40,7 @@ public class MarketStatTable {
 				stmt.executeBatch();
 			}
 		}
+		Utils.closeQuietly(stmt);
 	}
 
 }

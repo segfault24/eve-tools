@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import atsb.eve.model.Character;
+import atsb.eve.util.Utils;
 
 public class CharacterTable {
 
@@ -16,14 +17,14 @@ public class CharacterTable {
 	private static final String SELECT_IDS_SQL = "SELECT `charId` FROM `character`";
 
 	public static void upsert(Connection db, Character c) throws SQLException {
-		PreparedStatement stmt;
-		stmt = db.prepareStatement(UPSERT_SQL);
+		PreparedStatement stmt = db.prepareStatement(UPSERT_SQL);
 		stmt.setInt(1, c.getCharId());
 		stmt.setString(2, c.getCharName());
 		stmt.setInt(3, c.getCorpId());
 		stmt.setInt(4, c.getAllianceId());
 		stmt.setDate(5, c.getBirthday());
 		stmt.execute();
+		Utils.closeQuietly(stmt);
 	}
 
 	public static List<Integer> getAllIds(Connection db) throws SQLException {
@@ -33,6 +34,8 @@ public class CharacterTable {
 		while (rs.next()) {
 			ids.add(rs.getInt(1));
 		}
+		Utils.closeQuietly(rs);
+		Utils.closeQuietly(stmt);
 		return ids;
 	}
 

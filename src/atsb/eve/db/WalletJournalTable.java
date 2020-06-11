@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import atsb.eve.model.WalletJournalEntry;
+import atsb.eve.util.Utils;
 
 public class WalletJournalTable {
 
@@ -13,8 +14,9 @@ public class WalletJournalTable {
 
 	public static boolean insertMany(Connection db, List<WalletJournalEntry> js) {
 		boolean result = true;
+		PreparedStatement stmt = null;
 		try {
-			PreparedStatement stmt = db.prepareStatement(INSERT_IGNORE_SQL);
+			stmt = db.prepareStatement(INSERT_IGNORE_SQL);
 			for (WalletJournalEntry j : js) {
 				stmt.setLong(1, j.getJournalId());
 				stmt.setInt(2, j.getCharId());
@@ -42,6 +44,8 @@ public class WalletJournalTable {
 			}
 		} catch (SQLException e) {
 			result = false;
+		} finally {
+			Utils.closeQuietly(stmt);
 		}
 		return result;
 	}

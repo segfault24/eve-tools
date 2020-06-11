@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.Collection;
 
 import atsb.eve.model.MarketHistoryEntry;
+import atsb.eve.util.Utils;
 
 public class MarketHistoryTable {
 
@@ -33,6 +34,7 @@ public class MarketHistoryTable {
 				stmt.executeBatch();
 			}
 		}
+		Utils.closeQuietly(stmt);
 	}
 
 }

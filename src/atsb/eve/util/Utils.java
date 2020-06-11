@@ -87,15 +87,20 @@ public class Utils {
 		}
 
 		String propertyValue = "";
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
 		try {
-			PreparedStatement stmt = db.prepareStatement(SELECT_PROPERTY_SQL);
+			stmt = db.prepareStatement(SELECT_PROPERTY_SQL);
 			stmt.setString(1, propertyName);
-			ResultSet rs = stmt.executeQuery();
+			rs = stmt.executeQuery();
 			if (rs.next()) {
 				propertyValue = rs.getString("propertyValue");
 			}
 		} catch (SQLException e) {
 			log.warn("Failed to read property '" + propertyName + "' from database", e);
+		} finally {
+			Utils.closeQuietly(rs);
+			Utils.closeQuietly(stmt);
 		}
 
 		return propertyValue;
@@ -127,15 +132,20 @@ public class Utils {
 			return null;
 		}
 		String value = "";
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
 		try {
-			PreparedStatement stmt = db.prepareStatement(SELECT_KV_SQL);
+			stmt = db.prepareStatement(SELECT_KV_SQL);
 			stmt.setString(1, key);
-			ResultSet rs = stmt.executeQuery();
+			rs = stmt.executeQuery();
 			if (rs.next()) {
 				value = rs.getString("value");
 			}
 		} catch (SQLException e) {
 			log.warn("Failed to read kv '" + key + "' from database", e);
+		} finally {
+			Utils.closeQuietly(rs);
+			Utils.closeQuietly(stmt);
 		}
 		return value;
 	}
@@ -145,13 +155,16 @@ public class Utils {
 			log.warn("The db and key must be non-null and non-empty");
 			return;
 		}
+		PreparedStatement stmt = null;
 		try {
-			PreparedStatement stmt = db.prepareStatement(UPSERT_KV_SQL);
+			stmt = db.prepareStatement(UPSERT_KV_SQL);
 			stmt.setString(1, key);
 			stmt.setString(2, value);
 			stmt.execute();
 		} catch (SQLException e) {
 			log.warn("Failed to upsert kv '" + key + "' to database", e);
+		} finally {
+			Utils.closeQuietly(stmt);
 		}
 	}
 
@@ -160,12 +173,15 @@ public class Utils {
 			log.warn("The db and key must be non-null and non-empty");
 			return;
 		}
+		PreparedStatement stmt = null;
 		try {
-			PreparedStatement stmt = db.prepareStatement(DELETE_KV_SQL);
+			stmt = db.prepareStatement(DELETE_KV_SQL);
 			stmt.setString(1, key);
 			stmt.execute();
 		} catch (SQLException e) {
 			log.warn("Failed to delete kv '" + key + "' from database", e);
+		} finally {
+			Utils.closeQuietly(stmt);
 		}
 	}
 
@@ -192,32 +208,39 @@ public class Utils {
 		if (db == null || apiReqName == null) {
 			return null;
 		}
+		String value = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
 		try {
-			PreparedStatement stmt = db.prepareStatement(SELECT_ETAG_SQL);
+			stmt = db.prepareStatement(SELECT_ETAG_SQL);
 			stmt.setString(1, apiReqName);
-			ResultSet rs = stmt.executeQuery();
+			rs = stmt.executeQuery();
 			if (rs.next()) {
-				return rs.getString(1);
-			} else {
-				return null;
+				value = rs.getString(1);
 			}
 		} catch (SQLException e) {
 			log.warn("Failed to retrieve etag for apiReqName=" + apiReqName, e);
-			return null;
+		} finally {
+			Utils.closeQuietly(rs);
+			Utils.closeQuietly(stmt);
 		}
+		return value;
 	}
 
 	public static void upsertEtag(Connection db, String apiReqName, String etag) {
 		if (db == null || apiReqName == null || etag == null) {
 			return;
 		}
+		PreparedStatement stmt = null;
 		try {
-			PreparedStatement stmt = db.prepareStatement(UPSERT_ETAG_SQL);
+			stmt = db.prepareStatement(UPSERT_ETAG_SQL);
 			stmt.setString(1, apiReqName);
 			stmt.setString(2, etag);
 			stmt.execute();
 		} catch (SQLException e) {
 			log.warn("Failed to upsert etag for apiReqName=" + apiReqName, e);
+		} finally {
+			Utils.closeQuietly(stmt);
 		}
 	}
 

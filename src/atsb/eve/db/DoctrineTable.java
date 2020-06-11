@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import atsb.eve.model.Doctrine;
+import atsb.eve.util.Utils;
 
 public class DoctrineTable {
 
@@ -23,6 +24,7 @@ public class DoctrineTable {
 		stmt.setInt(4, d.getQuantity());
 		stmt.setInt(5, d.getTarget());
 		stmt.execute();
+		Utils.closeQuietly(stmt);
 	}
 
 	public static List<Doctrine> getAllDoctrines(Connection db) throws SQLException {
@@ -38,6 +40,8 @@ public class DoctrineTable {
 			d.setTarget(rs.getInt(5));
 			doctrines.add(d);
 		}
+		Utils.closeQuietly(rs);
+		Utils.closeQuietly(stmt);
 		return doctrines;
 	}
 

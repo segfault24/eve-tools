@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import atsb.eve.util.Utils;
+
 public class StructAuthTable {
 
 	public static List<Integer> getAuthKeyByStruct(Connection db, long structId) throws SQLException {
@@ -18,6 +20,8 @@ public class StructAuthTable {
 		while (rs.next()) {
 			keys.add(rs.getInt(1));
 		}
+		Utils.closeQuietly(rs);
+		Utils.closeQuietly(stmt);
 		return keys;
 	}
 
@@ -30,6 +34,8 @@ public class StructAuthTable {
 		while (rs.next()) {
 			structs.add(rs.getLong(1));
 		}
+		Utils.closeQuietly(rs);
+		Utils.closeQuietly(stmt);
 		return structs;
 	}
 
@@ -38,6 +44,7 @@ public class StructAuthTable {
 		stmt.setLong(1, structId);
 		stmt.setInt(2, keyId);
 		stmt.executeUpdate();
+		Utils.closeQuietly(stmt);
 	}
 
 }
