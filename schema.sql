@@ -14,7 +14,6 @@ USE `eve`;
 
 -- -----------------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `region`;
 CREATE TABLE `region` (
 	`regionId` int(11) NOT NULL,
 	`regionName` varchar(100) NOT NULL,
@@ -22,7 +21,6 @@ CREATE TABLE `region` (
 	PRIMARY KEY (`regionId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `constellation`;
 CREATE TABLE `constellation` (
 	`constellationId` int(11) NOT NULL,
 	`constellationName` varchar(100) NOT NULL,
@@ -31,7 +29,6 @@ CREATE TABLE `constellation` (
 	KEY `ix_constellation_regionId` (`regionId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `solarSystem`;
 CREATE TABLE `solarSystem` (
 	`solarSystemId` int(11) NOT NULL,
 	`solarSystemName` varchar(100) NOT NULL,
@@ -47,7 +44,6 @@ CREATE TABLE `solarSystem` (
 	KEY `ix_solarSystem_security` (`security`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `station`;
 CREATE TABLE `station` (
 	`stationId` bigint(20),
 	`stationName` varchar(100) NOT NULL,
@@ -60,7 +56,6 @@ CREATE TABLE `station` (
 	KEY `ix_station_solarSystemId` (`solarSystemId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `invType`;
 CREATE TABLE `invType` (
 	`typeId` int(11) NOT NULL,
 	`groupId` int(11) DEFAULT NULL,
@@ -75,7 +70,6 @@ CREATE TABLE `invType` (
 	KEY `ix_invType_marketGroupId` (`marketGroupId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `marketGroup`;
 CREATE TABLE `marketGroup` (
 	`marketGroupId` int(11) NOT NULL,
 	`parentGroupId` int(11) DEFAULT NULL,
@@ -85,7 +79,6 @@ CREATE TABLE `marketGroup` (
 	PRIMARY KEY (`marketGroupId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `alliance`;
 CREATE TABLE `alliance` (
 	`allianceId` INT,
 	`allianceName` VARCHAR(64),
@@ -95,7 +88,6 @@ CREATE TABLE `alliance` (
 	PRIMARY KEY (`allianceId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `corporation`;
 CREATE TABLE `corporation` (
 	`corpId` INT,
 	`corpName` VARCHAR(64),
@@ -111,7 +103,6 @@ CREATE TABLE `corporation` (
 	KEY `ix_corporation_allianceId` (`allianceId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `character`;
 CREATE TABLE `character` (
 	`charId` INT,
 	`charName` VARCHAR(64),
@@ -119,9 +110,8 @@ CREATE TABLE `character` (
 	`allianceId` INT,
 	`birthday` DATE,
 	PRIMARY KEY (`charId`)
-)  ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `structure`;
 CREATE TABLE `structure` (
 	`structId` BIGINT,
 	`structName` VARCHAR(64),
@@ -137,7 +127,6 @@ CREATE TABLE `structure` (
 
 -- -----------------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `property`;
 CREATE TABLE `property` (
 	`id` INT AUTO_INCREMENT,
 	`propertyName` VARCHAR(255) NULL,
@@ -146,7 +135,6 @@ CREATE TABLE `property` (
 	UNIQUE KEY `ux_property_propertyName` (`propertyName`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `kvStore`;
 CREATE TABLE `kvStore`  (
 	`id` INT AUTO_INCREMENT,
 	`key` VARCHAR(255) NULL,
@@ -155,7 +143,6 @@ CREATE TABLE `kvStore`  (
 	UNIQUE KEY `ux_kvStore_key` (`key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `dirtUser`;
 CREATE TABLE `dirtUser` (
 	`userId` INT AUTO_INCREMENT,
 	`username` VARCHAR(64) NOT NULL,
@@ -169,7 +156,6 @@ CREATE TABLE `dirtUser` (
 	UNIQUE KEY `ux_dirtUser_username` (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `dirtList`;
 CREATE TABLE `dirtList` (
 	`listId` INT AUTO_INCREMENT,
 	`userId` INT NOT NULL,
@@ -182,7 +168,6 @@ CREATE TABLE `dirtList` (
 	KEY `ix_dirtList_userId` (`userId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `dirtListItem`;
 CREATE TABLE `dirtListItem` (
 	`itemEntryId` INT AUTO_INCREMENT,
 	`listId` INT NOT NULL,
@@ -209,7 +194,6 @@ CREATE TABLE `doctrine` (
 		ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `dirtApiAuth`;
 CREATE TABLE `dirtApiAuth` (
 	`keyId` INT AUTO_INCREMENT,
 	`userId` INT NOT NULL,
@@ -225,7 +209,6 @@ CREATE TABLE `dirtApiAuth` (
 		ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `dirtStructAuth`;
 CREATE TABLE `dirtStructAuth` (
 	`dsaId` INT AUTO_INCREMENT,
 	`keyId` INT NOT NULL,
@@ -239,7 +222,6 @@ CREATE TABLE `dirtStructAuth` (
 		REFERENCES `structure` (`structId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `dirtAlert`;
 CREATE TABLE `dirtAlert` (
 	`alertId` INT AUTO_INCREMENT,
 	`userId` INT NOT NULL,
@@ -257,7 +239,6 @@ CREATE TABLE `dirtAlert` (
 	KEY `ix_dirtAlert_userId` (`userId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `dirtNotification`;
 CREATE TABLE `dirtNotification` (
 	`notifId` INT AUTO_INCREMENT,
 	`time` TIMESTAMP NOT NULL,
@@ -276,7 +257,6 @@ CREATE TABLE `dirtNotification` (
 	KEY `ix_dirtNotification_alertId` (`alertId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `fortchain`;
 CREATE TABLE `fortchain` (
 	`systemId` int(11) NOT NULL,
 	`superDocking` BOOLEAN DEFAULT FALSE,
@@ -293,16 +273,14 @@ CREATE TABLE `taskLog` (
 	`error` varchar(255),
 	PRIMARY KEY (`taskLogId`),
 	KEY `ix_taskLog_taskName` (`taskName`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `apiReq`;
 CREATE TABLE `apiReq` (
 	`apiReqName` VARCHAR(64) NOT NULL,
 	`etag` VARCHAR(64),
 	PRIMARY KEY (`apiReqName`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `walletJournal`;
 CREATE TABLE `walletJournal` (
 	`journalId` BIGINT,
 	`charId` INT NOT NULL,
@@ -322,7 +300,6 @@ CREATE TABLE `walletJournal` (
 	KEY `ix_walletJournal_charId` (`charId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `walletTransaction`;
 CREATE TABLE `walletTransaction` (
 	`transactionId` BIGINT,
 	`charId` INT NOT NULL,
@@ -341,13 +318,6 @@ CREATE TABLE `walletTransaction` (
 
 -- -----------------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `corpContractItem`;
-DROP TABLE IF EXISTS `corpContract`;
-DROP TABLE IF EXISTS `contractItem`;
-DROP TABLE IF EXISTS `contract`;
-DROP TABLE IF EXISTS `contractType`;
-DROP TABLE IF EXISTS `contractStatus`;
-DROP TABLE IF EXISTS `contractAvailability`;
 
 CREATE TABLE `contractType` (
 	`id` INT NOT NULL,
@@ -483,7 +453,6 @@ CREATE TABLE `corpContractItem` (
 
 -- -----------------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `marketHistory`;
 CREATE TABLE `marketHistory` (
 	`histEntryId` BIGINT AUTO_INCREMENT,
 	`typeId` INT NOT NULL,
@@ -499,7 +468,6 @@ CREATE TABLE `marketHistory` (
 	KEY `ix_marketHistory_typeId_regionId` (`typeId`, `regionId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `marketStat`;
 CREATE TABLE `marketStat` (
 	`statId` INT AUTO_INCREMENT,
 	`regionId` INT NOT NULL,
@@ -510,7 +478,6 @@ CREATE TABLE `marketStat` (
 	UNIQUE KEY `ux_marketStat_regionId_typeId` (`regionId`, `typeId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `marketOrder`;
 CREATE TABLE `marketOrder` (
 	`issued` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	`range` VARCHAR(45),
@@ -529,9 +496,8 @@ CREATE TABLE `marketOrder` (
 	KEY `ix_marketOrder_typeId_regionId` (`typeId`, `regionId`),
 	KEY `ix_marketOrder_locationId` (`locationId`),
 	KEY `ix_marketOrder_regionId` (`regionId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MEMORY DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `charOrder`;
 CREATE TABLE `charOrder` (
 	`orderEntryId` BIGINT AUTO_INCREMENT,
 	`issued` TIMESTAMP,
@@ -553,7 +519,6 @@ CREATE TABLE `charOrder` (
 	KEY `ix_charOrder_charId` (`charId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `insurancePrice`;
 CREATE TABLE `insurancePrice` (
 	`insuranceEntryId` BIGINT AUTO_INCREMENT,
 	`typeId` INT NOT NULL,
@@ -566,14 +531,12 @@ CREATE TABLE `insurancePrice` (
 
 -- -----------------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `merIskVolume`;
 CREATE TABLE `merIskVolume` (
 	`date` DATE NOT NULL,
 	`iskVolume` BIGINT,
 	PRIMARY KEY (`date`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `merMoneySupply`;
 CREATE TABLE `merMoneySupply` (
 	`date` DATE NOT NULL,
 	`character` BIGINT,
@@ -582,7 +545,6 @@ CREATE TABLE `merMoneySupply` (
 	PRIMARY KEY (`date`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `merProdDestMine`;
 CREATE TABLE `merProdDestMine` (
 	`date` DATE NOT NULL,
 	`produced` BIGINT,
@@ -591,7 +553,6 @@ CREATE TABLE `merProdDestMine` (
 	PRIMARY KEY (`date`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `merRegStat`;
 CREATE TABLE `merRegStat` (
 	`regStatEntryId` INT AUTO_INCREMENT,
 	`date` DATE NOT NULL,
@@ -612,7 +573,6 @@ CREATE TABLE `merRegStat` (
 	UNIQUE KEY `ux_merRegStat_regionId_date` (`regionId`, `date`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `merSinkFaucet`;
 CREATE TABLE `merSinkFaucet` (
 	`sinkFaucetEntryId` INT AUTO_INCREMENT,
 	`date` DATE NOT NULL,
@@ -627,10 +587,6 @@ CREATE TABLE `merSinkFaucet` (
 
 -- -----------------------------------------------------------------------------
 
-DROP VIEW IF EXISTS `vJitaBestBuy`;
-DROP VIEW IF EXISTS `vJitaBestSell`;
-DROP VIEW IF EXISTS `vAmarrBestBuy`;
-DROP VIEW IF EXISTS `vAmarrBestSell`;
 
 CREATE VIEW vJitaBestBuy AS SELECT typeId, MAX(price) AS best FROM marketOrder WHERE locationId=60003760 AND isBuyOrder=1 GROUP BY typeId, locationId;
 CREATE VIEW vJitaBestSell AS SELECT typeId, MIN(price) AS best FROM marketOrder WHERE locationId=60003760 AND isBuyOrder=0 GROUP BY typeId, locationId;
