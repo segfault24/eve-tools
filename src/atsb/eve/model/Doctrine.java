@@ -7,6 +7,7 @@ public class Doctrine {
 	private long locationId;
 	private int quantity;
 	private int target;
+	private double lowestPrice;
 
 	public int getDoctrineId() {
 		return doctrineId;
@@ -50,6 +51,14 @@ public class Doctrine {
 
 	public void setTarget(int target) {
 		this.target = target;
+	}
+
+	public double getLowestPrice() {
+		return lowestPrice;
+	}
+
+	public void setLowestPrice(double lowestPrice) {
+		this.lowestPrice = lowestPrice;
 	}
 
 }

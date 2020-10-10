@@ -188,6 +188,7 @@ CREATE TABLE `doctrine` (
 	`locationId` BIGINT NOT NULL,
 	`quantity` INT NOT NULL,
 	`target` INT NOT NULL,
+	`lowestPrice` DECIMAL(19,4) NOT NULL DEFAULT 0,
 	PRIMARY KEY (`doctrine`),
 	FOREIGN KEY (`listId`)
 		REFERENCES `dirtList` (`listId`)
