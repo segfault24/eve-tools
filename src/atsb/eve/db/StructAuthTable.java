@@ -47,4 +47,11 @@ public class StructAuthTable {
 		Utils.closeQuietly(stmt);
 	}
 
+	public static void deleteStructAuth(Connection db, long structId, int keyId) throws SQLException {
+		PreparedStatement stmt = db.prepareStatement("DELETE FROM dirtStructAuth WHERE `structId`=? AND `keyId`=?");
+		stmt.setLong(1, structId);
+		stmt.setInt(2, keyId);
+		stmt.executeUpdate();
+		Utils.closeQuietly(stmt);
+	}
 }
