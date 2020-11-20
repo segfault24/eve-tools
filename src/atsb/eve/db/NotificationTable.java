@@ -12,8 +12,8 @@ import atsb.eve.util.Utils;
 
 public class NotificationTable {
 
-	private static final String SELECT_BYALERT_SQL = "SELECT `notifId`,`time`,`userId`,`alertId`,`typeId`,`title`,`text`,`acknowledged`,`sent` FROM dirtNotification WHERE `alertId`=?";
-	private static final String INSERT_SQL = "INSERT INTO dirtNotification ("
+	private static final String SELECT_BYALERT_SQL = "SELECT `notifId`,`time`,`userId`,`alertId`,`typeId`,`title`,`text`,`acknowledged`,`sent` FROM dirtnotification WHERE `alertId`=?";
+	private static final String INSERT_SQL = "INSERT INTO dirtnotification ("
 			+ "`time`,`userId`,`alertId`,`typeId`,`title`,`text`,`acknowledged`,`sent`) VALUES (?,?,?,?,?,?,?,?)";
 
 	public static List<Notification> getNotificationsByAlert(Connection db, int alertId) throws SQLException {

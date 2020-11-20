@@ -10,7 +10,7 @@ import atsb.eve.util.Utils;
 
 public class MarketStatTable {
 
-	private static final String UPSERT_SQL = "INSERT INTO marketStat (`regionId`,`typeId`,`ma30`,`ma90`) "
+	private static final String UPSERT_SQL = "INSERT INTO marketstat (`regionId`,`typeId`,`ma30`,`ma90`) "
 			+ "VALUES (?,?,?,?) ON DUPLICATE KEY UPDATE "
 			+ "`ma30`=VALUES(`ma30`), `ma90`=VALUES(`ma90`)";
 

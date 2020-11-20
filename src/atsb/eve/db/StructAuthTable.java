@@ -13,7 +13,7 @@ public class StructAuthTable {
 
 	public static List<Integer> getAuthKeyByStruct(Connection db, long structId) throws SQLException {
 		PreparedStatement stmt;
-		stmt = db.prepareStatement("SELECT keyId FROM dirtStructAuth WHERE structId=?");
+		stmt = db.prepareStatement("SELECT keyId FROM dirtstructauth WHERE structId=?");
 		stmt.setLong(1, structId);
 		ResultSet rs = stmt.executeQuery();
 		ArrayList<Integer> keys = new ArrayList<Integer>();
@@ -26,7 +26,7 @@ public class StructAuthTable {
 	}
 
 	public static List<Long> getStructIdByRegion(Connection db, int regionId) throws SQLException {
-		PreparedStatement stmt = db.prepareStatement("SELECT DISTINCT d.structId FROM dirtStructAuth AS d "
+		PreparedStatement stmt = db.prepareStatement("SELECT DISTINCT d.structId FROM dirtstructauth AS d "
 				+ "JOIN structure AS s ON d.structId=s.structId WHERE s.regionId=?");
 		stmt.setInt(1, regionId);
 		ResultSet rs = stmt.executeQuery();
@@ -40,7 +40,7 @@ public class StructAuthTable {
 	}
 
 	public static void insert(Connection db, long structId, int keyId) throws SQLException {
-		PreparedStatement stmt = db.prepareStatement("INSERT INTO dirtStructAuth (`structId`,`keyId`) VALUES (?,?)");
+		PreparedStatement stmt = db.prepareStatement("INSERT INTO dirtstructauth (`structId`,`keyId`) VALUES (?,?)");
 		stmt.setLong(1, structId);
 		stmt.setInt(2, keyId);
 		stmt.executeUpdate();
@@ -48,7 +48,7 @@ public class StructAuthTable {
 	}
 
 	public static void deleteStructAuth(Connection db, long structId, int keyId) throws SQLException {
-		PreparedStatement stmt = db.prepareStatement("DELETE FROM dirtStructAuth WHERE `structId`=? AND `keyId`=?");
+		PreparedStatement stmt = db.prepareStatement("DELETE FROM dirtstructauth WHERE `structId`=? AND `keyId`=?");
 		stmt.setLong(1, structId);
 		stmt.setInt(2, keyId);
 		stmt.executeUpdate();

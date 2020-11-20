@@ -12,16 +12,16 @@ import atsb.eve.util.Utils;
 
 public class InvTypeTable {
 
-	private static final String SELECT_ALL_IDS_SQL = "SELECT typeId FROM invType";
+	private static final String SELECT_ALL_IDS_SQL = "SELECT typeId FROM invtype";
 	private static final String SELECT_BY_ID_SQL = "SELECT `typeId`,`groupId`,`typeName`,"
-			+ "`description`,`mass`,`volume`,`published`,`marketGroupId` FROM invType WHERE `typeId`=?";
-	private static final String UPSERT_SQL = "INSERT INTO invType "
+			+ "`description`,`mass`,`volume`,`published`,`marketGroupId` FROM invtype WHERE `typeId`=?";
+	private static final String UPSERT_SQL = "INSERT INTO invtype "
 			+ "(`typeId`,`groupId`,`typeName`,`description`,`mass`,`volume`,`published`,`marketGroupId`) "
 			+ "VALUES (?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE "
 			+ "`typeId`=VALUES(`typeId`), `groupId`=VALUES(`groupId`), `typeName`=VALUES(`typeName`), `description`=VALUES(`description`), "
 			+ "`mass`=VALUES(`mass`), `volume`=VALUES(`volume`), `published`=VALUES(`published`), `marketGroupId`=VALUES(`marketGroupId`)";
 
-	private static final String SELECT_MARKETABLE_TYPES_SQL = "SELECT typeId FROM invType WHERE published=1 AND marketGroupId IS NOT NULL";
+	private static final String SELECT_MARKETABLE_TYPES_SQL = "SELECT typeId FROM invtype WHERE published=1 AND marketGroupId IS NOT NULL";
 
 	public static List<Integer> selectAllIds(Connection db) throws SQLException {
 		PreparedStatement stmt = db.prepareStatement(SELECT_ALL_IDS_SQL);
@@ -71,7 +71,7 @@ public class InvTypeTable {
 	}
 
 	public static void delete(Connection db, InvType i) throws SQLException {
-		PreparedStatement stmt = db.prepareStatement("DELETE FROM invType WHERE typeId=?");
+		PreparedStatement stmt = db.prepareStatement("DELETE FROM invtype WHERE typeId=?");
 		stmt.setInt(1, i.getTypeId());
 		stmt.execute();
 		Utils.closeQuietly(stmt);

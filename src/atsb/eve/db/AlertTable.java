@@ -13,8 +13,8 @@ import atsb.eve.util.Utils;
 
 public class AlertTable {
 
-	private static final String SELECT_ALL_SQL = "SELECT `alertId`,`userId`,`alertType`,`enabled`,`param1`,`param2`,`param3`,`param4`,`param5` FROM dirtAlert";
-	private static final String SELECT_BYUSER_SQL = "SELECT `alertId`,`userId`,`alertType`,`enabled`,`param1`,`param2`,`param3`,`param4`,`param5` FROM dirtAlert WHERE `userId`=?";
+	private static final String SELECT_ALL_SQL = "SELECT `alertId`,`userId`,`alertType`,`enabled`,`param1`,`param2`,`param3`,`param4`,`param5` FROM dirtalert";
+	private static final String SELECT_BYUSER_SQL = "SELECT `alertId`,`userId`,`alertType`,`enabled`,`param1`,`param2`,`param3`,`param4`,`param5` FROM dirtalert WHERE `userId`=?";
 
 	public static List<Alert> getAllAlerts(Connection db) throws SQLException {
 		PreparedStatement stmt = db.prepareStatement(SELECT_ALL_SQL);

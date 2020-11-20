@@ -19,16 +19,16 @@ public class CorpContractTable {
 			+ "`assigneeId`,`acceptorId`,`availability`,`status`,`type`,`dateIssued`,`dateExpired`,"
 			+ "`dateAccepted`,`dateCompleted`,`title`,`forCorp`,`startLocationId`,`endLocationId`,"
 			+ "`daysToComplete`,`price`,`reward`,`collateral`,`buyout`,`volume`"
-			+ " FROM corpContract WHERE contractId=?";
+			+ " FROM corpcontract WHERE contractId=?";
 
 	private static final String SELECT_OUTSTANDING_EXCHANGE_SQL = "SELECT `contractId`,`issuerId`,`issuerCorpId`,"
 			+ "`assigneeId`,`acceptorId`,`availability`,`status`,`type`,`dateIssued`,`dateExpired`,"
 			+ "`dateAccepted`,`dateCompleted`,`title`,`forCorp`,`startLocationId`,`endLocationId`,"
-			+ "`daysToComplete`,`price`,`reward`,`collateral`,`buyout`,`volume`" + " FROM corpContract WHERE status="
+			+ "`daysToComplete`,`price`,`reward`,`collateral`,`buyout`,`volume`" + " FROM corpcontract WHERE status="
 			+ ContractStatus.OUTSTANDING.getValue() + " AND type=" + ContractType.ITEM_EXCHANGE.getValue()
 			+ " AND dateExpired>NOW()";
 
-	private static final String INSERT_SQL = "INSERT INTO corpContract ("
+	private static final String INSERT_SQL = "INSERT INTO corpcontract ("
 			+ "`contractId`,`issuerId`,`issuerCorpId`,`assigneeId`,`acceptorId`,`availability`,"
 			+ "`status`,`type`,`dateIssued`,`dateExpired`,`dateAccepted`,`dateCompleted`,"
 			+ "`title`,`forCorp`,`startLocationId`,`endLocationId`,`daysToComplete`,"

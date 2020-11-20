@@ -1,7 +1,7 @@
 -- -----------------------------------------------------------------------------
 -- Conventions used by this database:
 --
--- tables and columns are named in camelCase
+-- tables are lowercase, columns are camelCase
 -- indices are named in the following convention:
 --   px_<table>_<col>              primary KEY (single column, sometimes on surrogate indices)
 --   fx_<table>_<col1>_<col2>_...  foreign indices (constrain to other tables)
@@ -31,7 +31,7 @@ CREATE TABLE `constellation` (
 	KEY `ix_constellation_regionId` (`regionId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `solarSystem` (
+CREATE TABLE `solarsystem` (
 	`solarSystemId` int(11) NOT NULL,
 	`solarSystemName` varchar(100) NOT NULL,
 	`constellationId` int(11) NOT NULL,
@@ -41,9 +41,9 @@ CREATE TABLE `solarSystem` (
 	`z` double DEFAULT NULL,
 	`security` double DEFAULT NULL,
 	PRIMARY KEY (`solarSystemId`),
-	KEY `ix_solarSystem_regionId` (`regionId`),
-	KEY `ix_solarSystem_constellationId` (`constellationId`),
-	KEY `ix_solarSystem_security` (`security`)
+	KEY `ix_solarsystem_regionId` (`regionId`),
+	KEY `ix_solarsystem_constellationId` (`constellationId`),
+	KEY `ix_solarsystem_security` (`security`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `station` (
@@ -58,7 +58,7 @@ CREATE TABLE `station` (
 	KEY `ix_station_solarSystemId` (`solarSystemId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `invType` (
+CREATE TABLE `invtype` (
 	`typeId` int(11) NOT NULL,
 	`groupId` int(11) DEFAULT NULL,
 	`typeName` varchar(100) DEFAULT NULL,
@@ -68,11 +68,11 @@ CREATE TABLE `invType` (
 	`published` tinyint(1) DEFAULT NULL,
 	`marketGroupId` int(11) DEFAULT NULL,
 	PRIMARY KEY (`typeId`),
-	KEY `ix_invType_groupId` (`groupId`),
-	KEY `ix_invType_marketGroupId` (`marketGroupId`)
+	KEY `ix_invtype_groupId` (`groupId`),
+	KEY `ix_invtype_marketGroupId` (`marketGroupId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `marketGroup` (
+CREATE TABLE `marketgroup` (
 	`marketGroupId` int(11) NOT NULL,
 	`parentGroupId` int(11) DEFAULT NULL,
 	`marketGroupName` varchar(100) DEFAULT NULL,
@@ -137,15 +137,15 @@ CREATE TABLE `property` (
 	UNIQUE KEY `ux_property_propertyName` (`propertyName`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `kvStore`  (
+CREATE TABLE `kvstore`  (
 	`id` INT AUTO_INCREMENT,
 	`key` VARCHAR(255) NULL,
 	`value` VARCHAR(255) NULL,
 	PRIMARY KEY (`id`),
-	UNIQUE KEY `ux_kvStore_key` (`key`)
+	UNIQUE KEY `ux_kvstore_key` (`key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `dirtUser` (
+CREATE TABLE `dirtuser` (
 	`userId` INT AUTO_INCREMENT,
 	`username` VARCHAR(64) NOT NULL,
 	`name` VARCHAR(64),
@@ -155,32 +155,32 @@ CREATE TABLE `dirtUser` (
 	`admin` BOOLEAN NOT NULL DEFAULT FALSE,
 	`disabled` BOOLEAN NOT NULL DEFAULT FALSE,
 	PRIMARY KEY (`userId`),
-	UNIQUE KEY `ux_dirtUser_username` (`username`)
+	UNIQUE KEY `ux_dirtuser_username` (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `dirtList` (
+CREATE TABLE `dirtlist` (
 	`listId` INT AUTO_INCREMENT,
 	`userId` INT NOT NULL,
 	`name` VARCHAR(64),
 	`public` BOOLEAN NOT NULL DEFAULT 0,
 	PRIMARY KEY (`listId`),
 	FOREIGN KEY (`userId`)
-		REFERENCES `dirtUser`(`userId`)
+		REFERENCES `dirtuser`(`userId`)
 		ON DELETE CASCADE,
-	KEY `ix_dirtList_userId` (`userId`)
+	KEY `ix_dirtlist_userId` (`userId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `dirtListItem` (
+CREATE TABLE `dirtlistitem` (
 	`itemEntryId` INT AUTO_INCREMENT,
 	`listId` INT NOT NULL,
 	`typeId` INT NOT NULL,
 	`quantity` INT NOT NULL DEFAULT 1 CHECK (`quantity` >= 0),
 	PRIMARY KEY (`itemEntryId`),
 	FOREIGN KEY (`listId`)
-		REFERENCES `dirtList` (`listId`)
+		REFERENCES `dirtlist` (`listId`)
 		ON DELETE CASCADE,
 	FOREIGN KEY (`typeId`)
-		REFERENCES `invType` (`typeId`),
+		REFERENCES `invtype` (`typeId`),
 	UNIQUE KEY (`listId` , `typeId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -193,11 +193,11 @@ CREATE TABLE `doctrine` (
 	`lowestPrice` DECIMAL(19,4) NOT NULL DEFAULT 0,
 	PRIMARY KEY (`doctrine`),
 	FOREIGN KEY (`listId`)
-		REFERENCES `dirtList` (`listId`)
+		REFERENCES `dirtlist` (`listId`)
 		ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `dirtApiAuth` (
+CREATE TABLE `dirtapiauth` (
 	`keyId` INT AUTO_INCREMENT,
 	`userId` INT NOT NULL,
 	`charId` INT NOT NULL,
@@ -208,24 +208,24 @@ CREATE TABLE `dirtApiAuth` (
 	`refresh` VARCHAR(255),
 	PRIMARY KEY (`keyId`),
 	FOREIGN KEY (`userId`)
-		REFERENCES `dirtUser` (`userId`)
+		REFERENCES `dirtuser` (`userId`)
 		ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `dirtStructAuth` (
+CREATE TABLE `dirtstructauth` (
 	`dsaId` INT AUTO_INCREMENT,
 	`keyId` INT NOT NULL,
 	`structId` BIGINT NOT NULL,
 	PRIMARY KEY (`dsaId`),
 	UNIQUE KEY (`keyId`, `structId`),
 	FOREIGN KEY (`keyId`)
-		REFERENCES `dirtApiAuth` (`keyId`)
+		REFERENCES `dirtapiauth` (`keyId`)
 		ON DELETE CASCADE,
 	FOREIGN KEY (`structId`)
 		REFERENCES `structure` (`structId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `dirtAlert` (
+CREATE TABLE `dirtalert` (
 	`alertId` INT AUTO_INCREMENT,
 	`userId` INT NOT NULL,
 	`alertType` INT NOT NULL,
@@ -237,12 +237,12 @@ CREATE TABLE `dirtAlert` (
 	`param5` VARCHAR(255),
 	PRIMARY KEY (`alertId`),
 	FOREIGN KEY (`userId`)
-		REFERENCES `dirtUser`(`userId`)
+		REFERENCES `dirtuser`(`userId`)
 		ON DELETE CASCADE,
-	KEY `ix_dirtAlert_userId` (`userId`)
+	KEY `ix_dirtalert_userId` (`userId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `dirtNotification` (
+CREATE TABLE `dirtnotification` (
 	`notifId` INT AUTO_INCREMENT,
 	`time` TIMESTAMP NOT NULL,
 	`userId` INT NOT NULL,
@@ -254,10 +254,10 @@ CREATE TABLE `dirtNotification` (
 	`sent` BOOLEAN NOT NULL DEFAULT FALSE,
 	PRIMARY KEY (`notifId`),
 	FOREIGN KEY (`userId`)
-		REFERENCES `dirtUser`(`userId`)
+		REFERENCES `dirtuser`(`userId`)
 		ON DELETE CASCADE,
-	KEY `ix_dirtNotification_userId` (`userId`),
-	KEY `ix_dirtNotification_alertId` (`alertId`)
+	KEY `ix_dirtnotification_userId` (`userId`),
+	KEY `ix_dirtnotification_alertId` (`alertId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `fortchain` (
@@ -266,7 +266,7 @@ CREATE TABLE `fortchain` (
 	PRIMARY KEY (`systemId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `taskLog` (
+CREATE TABLE `tasklog` (
 	`taskLogId` INT AUTO_INCREMENT,
 	`taskName` VARCHAR(255) NOT NULL,
 	`startTime` timestamp NOT NULL,
@@ -275,16 +275,16 @@ CREATE TABLE `taskLog` (
 	`success` boolean NOT NULL DEFAULT FALSE,
 	`error` varchar(255),
 	PRIMARY KEY (`taskLogId`),
-	KEY `ix_taskLog_taskName` (`taskName`)
+	KEY `ix_tasklog_taskName` (`taskName`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `apiReq` (
+CREATE TABLE `apireq` (
 	`apiReqName` VARCHAR(64) NOT NULL,
 	`etag` VARCHAR(64),
 	PRIMARY KEY (`apiReqName`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `walletJournal` (
+CREATE TABLE `walletjournal` (
 	`journalId` BIGINT,
 	`charId` INT NOT NULL,
 	`amount` DECIMAL(19,4),
@@ -300,10 +300,10 @@ CREATE TABLE `walletJournal` (
 	`tax` DECIMAL(19,4),
 	`taxReceiverId` INT,
 	PRIMARY KEY (`journalId`),
-	KEY `ix_walletJournal_charId` (`charId`)
+	KEY `ix_walletjournal_charId` (`charId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `walletTransaction` (
+CREATE TABLE `wallettransaction` (
 	`transactionId` BIGINT,
 	`charId` INT NOT NULL,
 	`clientId` INT,
@@ -316,49 +316,49 @@ CREATE TABLE `walletTransaction` (
 	`locationId` BIGINT NOT NULL,
 	`journalRefId` BIGINT,
 	PRIMARY KEY (`transactionId`),
-	KEY `ix_walletTransaction_charId` (`charId`)
+	KEY `ix_wallettransaction_charId` (`charId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- -----------------------------------------------------------------------------
 
 
-CREATE TABLE `contractType` (
+CREATE TABLE `contracttype` (
 	`id` INT NOT NULL,
 	`value` VARCHAR(255) NOT NULL,
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-INSERT INTO `contractType` (`id`,`value`) VALUES (1,"Unknown");
-INSERT INTO `contractType` (`id`,`value`) VALUES (2,"Item Exchange");
-INSERT INTO `contractType` (`id`,`value`) VALUES (3,"Auction");
-INSERT INTO `contractType` (`id`,`value`) VALUES (4,"Courier");
-INSERT INTO `contractType` (`id`,`value`) VALUES (5,"Loan");
+INSERT INTO `contracttype` (`id`,`value`) VALUES (1,"Unknown");
+INSERT INTO `contracttype` (`id`,`value`) VALUES (2,"Item Exchange");
+INSERT INTO `contracttype` (`id`,`value`) VALUES (3,"Auction");
+INSERT INTO `contracttype` (`id`,`value`) VALUES (4,"Courier");
+INSERT INTO `contracttype` (`id`,`value`) VALUES (5,"Loan");
 
-CREATE TABLE `contractStatus` (
+CREATE TABLE `contractstatus` (
 	`id` INT NOT NULL,
 	`value` VARCHAR(255) NOT NULL,
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-INSERT INTO `contractStatus` (`id`,`value`) VALUES (1,"Outstanding");
-INSERT INTO `contractStatus` (`id`,`value`) VALUES (2,"In Progress");
-INSERT INTO `contractStatus` (`id`,`value`) VALUES (3,"Finished Issuer");
-INSERT INTO `contractStatus` (`id`,`value`) VALUES (4,"Finished Contractor");
-INSERT INTO `contractStatus` (`id`,`value`) VALUES (5,"Finished");
-INSERT INTO `contractStatus` (`id`,`value`) VALUES (6,"Cancelled");
-INSERT INTO `contractStatus` (`id`,`value`) VALUES (7,"Rejected");
-INSERT INTO `contractStatus` (`id`,`value`) VALUES (8,"Failed");
-INSERT INTO `contractStatus` (`id`,`value`) VALUES (9,"Deleted");
-INSERT INTO `contractStatus` (`id`,`value`) VALUES (10,"Reversed");
-INSERT INTO `contractStatus` (`id`,`value`) VALUES (11,"Unknown");
+INSERT INTO `contractstatus` (`id`,`value`) VALUES (1,"Outstanding");
+INSERT INTO `contractstatus` (`id`,`value`) VALUES (2,"In Progress");
+INSERT INTO `contractstatus` (`id`,`value`) VALUES (3,"Finished Issuer");
+INSERT INTO `contractstatus` (`id`,`value`) VALUES (4,"Finished Contractor");
+INSERT INTO `contractstatus` (`id`,`value`) VALUES (5,"Finished");
+INSERT INTO `contractstatus` (`id`,`value`) VALUES (6,"Cancelled");
+INSERT INTO `contractstatus` (`id`,`value`) VALUES (7,"Rejected");
+INSERT INTO `contractstatus` (`id`,`value`) VALUES (8,"Failed");
+INSERT INTO `contractstatus` (`id`,`value`) VALUES (9,"Deleted");
+INSERT INTO `contractstatus` (`id`,`value`) VALUES (10,"Reversed");
+INSERT INTO `contractstatus` (`id`,`value`) VALUES (11,"Unknown");
 
-CREATE TABLE `contractAvailability` (
+CREATE TABLE `contractavailability` (
 	`id` INT NOT NULL,
 	`value` VARCHAR(255) NOT NULL,
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-INSERT INTO `contractAvailability` (`id`,`value`) VALUES (1,"Public");
-INSERT INTO `contractAvailability` (`id`,`value`) VALUES (2,"Personal");
-INSERT INTO `contractAvailability` (`id`,`value`) VALUES (3,"Corporation");
-INSERT INTO `contractAvailability` (`id`,`value`) VALUES (4,"Alliance");
+INSERT INTO `contractavailability` (`id`,`value`) VALUES (1,"Public");
+INSERT INTO `contractavailability` (`id`,`value`) VALUES (2,"Personal");
+INSERT INTO `contractavailability` (`id`,`value`) VALUES (3,"Corporation");
+INSERT INTO `contractavailability` (`id`,`value`) VALUES (4,"Alliance");
 
 CREATE TABLE `contract` (
 	`contractId` INT NOT NULL,
@@ -385,14 +385,14 @@ CREATE TABLE `contract` (
 	`volume` DECIMAL(19,4),
 	PRIMARY KEY (`contractId`),
 	FOREIGN KEY (`type`)
-		REFERENCES `contractType`(`id`),
+		REFERENCES `contracttype`(`id`),
 	FOREIGN KEY (`status`)
-		REFERENCES `contractStatus`(`id`),
+		REFERENCES `contractstatus`(`id`),
 	FOREIGN KEY (`availability`)
-		REFERENCES `contractAvailability`(`id`)
+		REFERENCES `contractavailability`(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `contractItem` (
+CREATE TABLE `contractitem` (
 	`contractItemId` INT AUTO_INCREMENT,
 	`contractId` INT NOT NULL,
 	`typeId` INT NOT NULL,
@@ -404,10 +404,10 @@ CREATE TABLE `contractItem` (
 	FOREIGN KEY (`contractId`)
 		REFERENCES `contract`(`contractId`)
 		ON DELETE CASCADE,
-	KEY `ix_contractItem_contractId` (`contractId`)
+	KEY `ix_contractitem_contractId` (`contractId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `corpContract` (
+CREATE TABLE `corpcontract` (
 	`contractId` INT NOT NULL,
 	`type` INT NOT NULL,
 	`status` INT NOT NULL,
@@ -432,14 +432,14 @@ CREATE TABLE `corpContract` (
 	`volume` DECIMAL(19,4),
 	PRIMARY KEY (`contractId`),
 	FOREIGN KEY (`type`)
-		REFERENCES `contractType`(`id`),
+		REFERENCES `contracttype`(`id`),
 	FOREIGN KEY (`status`)
-		REFERENCES `contractStatus`(`id`),
+		REFERENCES `contractstatus`(`id`),
 	FOREIGN KEY (`availability`)
-		REFERENCES `contractAvailability`(`id`)
+		REFERENCES `contractavailability`(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `corpContractItem` (
+CREATE TABLE `corpcontractitem` (
 	`contractItemId` INT AUTO_INCREMENT,
 	`contractId` INT NOT NULL,
 	`typeId` INT NOT NULL,
@@ -449,14 +449,14 @@ CREATE TABLE `corpContractItem` (
 	`singleton` BOOLEAN NOT NULL,
 	PRIMARY KEY (`contractItemId`),
 	FOREIGN KEY (`contractId`)
-		REFERENCES `corpContract`(`contractId`)
+		REFERENCES `corpcontract`(`contractId`)
 		ON DELETE CASCADE,
-	KEY `ix_corpContractItem_contractId` (`contractId`)
+	KEY `ix_corpcontractitem_contractId` (`contractId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- -----------------------------------------------------------------------------
 
-CREATE TABLE `marketHistory` (
+CREATE TABLE `markethistory` (
 	`histEntryId` BIGINT AUTO_INCREMENT,
 	`typeId` INT NOT NULL,
 	`regionId` INT NOT NULL,
@@ -467,21 +467,21 @@ CREATE TABLE `marketHistory` (
 	`volume` BIGINT,
 	`orderCount` BIGINT,
 	PRIMARY KEY (`histEntryId`),
-	UNIQUE KEY `ux_marketHistory_typeId_regionId_date` (`typeId`,`regionId`,`date`),
-	KEY `ix_marketHistory_typeId_regionId` (`typeId`, `regionId`)
+	UNIQUE KEY `ux_markethistory_typeId_regionId_date` (`typeId`,`regionId`,`date`),
+	KEY `ix_markethistory_typeId_regionId` (`typeId`, `regionId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `marketStat` (
+CREATE TABLE `marketstat` (
 	`statId` INT AUTO_INCREMENT,
 	`regionId` INT NOT NULL,
 	`typeId` INT NOT NULL,
 	`ma30` BIGINT(20),
 	`ma90` BIGINT(20),
 	PRIMARY KEY (`statId`),
-	UNIQUE KEY `ux_marketStat_regionId_typeId` (`regionId`, `typeId`)
+	UNIQUE KEY `ux_marketstat_regionId_typeId` (`regionId`, `typeId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `marketOrder` (
+CREATE TABLE `marketorder` (
 	`issued` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	`range` VARCHAR(45),
 	`isBuyOrder` BOOLEAN,
@@ -496,12 +496,12 @@ CREATE TABLE `marketOrder` (
 	`regionId` INT NOT NULL,
 	`retrieved` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	PRIMARY KEY (`orderId`),
-	KEY `ix_marketOrder_typeId_regionId` (`typeId`, `regionId`),
-	KEY `ix_marketOrder_locationId` (`locationId`),
-	KEY `ix_marketOrder_regionId` (`regionId`)
+	KEY `ix_marketorder_typeId_regionId` (`typeId`, `regionId`),
+	KEY `ix_marketorder_locationId` (`locationId`),
+	KEY `ix_marketorder_regionId` (`regionId`)
 ) ENGINE=MEMORY DEFAULT CHARSET=utf8;
 
-CREATE TABLE `charOrder` (
+CREATE TABLE `charorder` (
 	`orderEntryId` BIGINT AUTO_INCREMENT,
 	`issued` TIMESTAMP,
 	`range` VARCHAR(45),
@@ -518,11 +518,11 @@ CREATE TABLE `charOrder` (
 	`retrieved` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	`charId` INT,
 	PRIMARY KEY (`orderEntryId`),
-	UNIQUE KEY `ux_charOrder_orderId` (`orderId`),
-	KEY `ix_charOrder_charId` (`charId`)
+	UNIQUE KEY `ux_charorder_orderId` (`orderId`),
+	KEY `ix_charorder_charId` (`charId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `insurancePrice` (
+CREATE TABLE `insuranceprice` (
 	`insuranceEntryId` BIGINT AUTO_INCREMENT,
 	`typeId` INT NOT NULL,
 	`name` VARCHAR(255) NOT NULL,
@@ -534,13 +534,13 @@ CREATE TABLE `insurancePrice` (
 
 -- -----------------------------------------------------------------------------
 
-CREATE TABLE `merIskVolume` (
+CREATE TABLE `meriskvolume` (
 	`date` DATE NOT NULL,
 	`iskVolume` BIGINT,
 	PRIMARY KEY (`date`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `merMoneySupply` (
+CREATE TABLE `mermoneysupply` (
 	`date` DATE NOT NULL,
 	`character` BIGINT,
 	`corporation` BIGINT,
@@ -548,7 +548,7 @@ CREATE TABLE `merMoneySupply` (
 	PRIMARY KEY (`date`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `merProdDestMine` (
+CREATE TABLE `merproddestmine` (
 	`date` DATE NOT NULL,
 	`produced` BIGINT,
 	`destroyed` BIGINT,
@@ -556,7 +556,7 @@ CREATE TABLE `merProdDestMine` (
 	PRIMARY KEY (`date`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `merRegStat` (
+CREATE TABLE `merregstat` (
 	`regStatEntryId` INT AUTO_INCREMENT,
 	`date` DATE NOT NULL,
 	`regionId` INT NOT NULL,
@@ -573,10 +573,10 @@ CREATE TABLE `merRegStat` (
 	PRIMARY KEY (`regStatEntryId`),
 	FOREIGN KEY (`regionId`)
 		REFERENCES `region`(`regionId`),
-	UNIQUE KEY `ux_merRegStat_regionId_date` (`regionId`, `date`)
+	UNIQUE KEY `ux_merregstat_regionId_date` (`regionId`, `date`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `merSinkFaucet` (
+CREATE TABLE `mersinkfaucet` (
 	`sinkFaucetEntryId` INT AUTO_INCREMENT,
 	`date` DATE NOT NULL,
 	`keyText` VARCHAR(64) NOT NULL,
@@ -585,18 +585,18 @@ CREATE TABLE `merSinkFaucet` (
 	`sink` BIGINT,
 	`sortValue` BIGINT,
 	PRIMARY KEY (`sinkFaucetEntryId`),
-	UNIQUE KEY `ux_merSinkFaucet_keyText_date` (`keyText` , `date`)
+	UNIQUE KEY `ux_mersinkfaucet_keyText_date` (`keyText` , `date`)
 )  ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- -----------------------------------------------------------------------------
 
-CREATE TABLE `dEntity` (
+CREATE TABLE `dentity` (
 	`id` INT,
 	`name` VARCHAR(64),
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `dLocation` (
+CREATE TABLE `dlocation` (
 	`locationId` BIGINT,
 	`locationName` VARCHAR(100),
 	PRIMARY KEY (`locationId`)
@@ -604,8 +604,8 @@ CREATE TABLE `dLocation` (
 
 -- -----------------------------------------------------------------------------
 
-CREATE VIEW vJitaBestBuy AS SELECT typeId, MAX(price) AS best FROM marketOrder WHERE locationId=60003760 AND isBuyOrder=1 GROUP BY typeId, locationId;
-CREATE VIEW vJitaBestSell AS SELECT typeId, MIN(price) AS best FROM marketOrder WHERE locationId=60003760 AND isBuyOrder=0 GROUP BY typeId, locationId;
-CREATE VIEW vAmarrBestBuy AS SELECT typeId, MAX(price) AS best FROM marketOrder WHERE locationId=60008494 AND isBuyOrder=1 GROUP BY typeId, locationId;
-CREATE VIEW vAmarrBestSell AS SELECT typeId, MIN(price) AS best FROM marketOrder WHERE locationId=60008494 AND isBuyOrder=0 GROUP BY typeId, locationId;
+CREATE VIEW vjitabestbuy AS SELECT typeId, MAX(price) AS best FROM marketorder WHERE locationId=60003760 AND isBuyOrder=1 GROUP BY typeId, locationId;
+CREATE VIEW vjitabestsell AS SELECT typeId, MIN(price) AS best FROM marketorder WHERE locationId=60003760 AND isBuyOrder=0 GROUP BY typeId, locationId;
+CREATE VIEW vamarrbestbuy AS SELECT typeId, MAX(price) AS best FROM marketorder WHERE locationId=60008494 AND isBuyOrder=1 GROUP BY typeId, locationId;
+CREATE VIEW vamarrbestsell AS SELECT typeId, MIN(price) AS best FROM marketorder WHERE locationId=60008494 AND isBuyOrder=0 GROUP BY typeId, locationId;
 

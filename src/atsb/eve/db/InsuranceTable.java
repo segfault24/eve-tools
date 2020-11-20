@@ -10,8 +10,8 @@ import atsb.eve.util.Utils;
 
 public class InsuranceTable {
 
-	private static String DELETE_SQL = "DELETE FROM `insurancePrice`";
-	private static String INSERT_SQL = "INSERT INTO insurancePrice (`typeId`,`name`,`cost`,`payout`) VALUES (?,?,?,?)";
+	private static String DELETE_SQL = "DELETE FROM `insuranceprice`";
+	private static String INSERT_SQL = "INSERT INTO insuranceprice (`typeId`,`name`,`cost`,`payout`) VALUES (?,?,?,?)";
 
 	public static void insertMany(Connection db, Collection<InsurancePrice> prices) throws SQLException {
 		PreparedStatement stmt = db.prepareStatement(INSERT_SQL);

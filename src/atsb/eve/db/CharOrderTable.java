@@ -11,14 +11,14 @@ import atsb.eve.util.Utils;
 
 public class CharOrderTable {
 
-	private static final String UPSERT_SQL = "INSERT INTO charOrder ("
+	private static final String UPSERT_SQL = "INSERT INTO charorder ("
 			+ "`issued`,`range`,`isBuyOrder`,`duration`,`orderId`,`volumeRemain`,`minVolume`,"
 			+ "`typeId`,`volumeTotal`,`locationId`,`price`,`regionId`,`retrieved`,`charId`"
 			+ ") VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE "
 			+ "`volumeRemain`=VALUES(`volumeRemain`),`price`=VALUES(`price`),"
 			+ "`retrieved`=VALUES(`retrieved`),`issued`=VALUES(`issued`)";
-	private static final String DELETE_CHARACTER_SQL = "DELETE FROM charOrder WHERE `charId`=? AND `retrieved`<?";
-	private static final String DELETE_SQL = "DELETE FROM charOrder WHERE retrieved<?";
+	private static final String DELETE_CHARACTER_SQL = "DELETE FROM charorder WHERE `charId`=? AND `retrieved`<?";
+	private static final String DELETE_SQL = "DELETE FROM charorder WHERE retrieved<?";
 
 	private static final int BATCH_SIZE = 1000;
 

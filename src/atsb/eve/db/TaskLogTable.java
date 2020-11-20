@@ -10,8 +10,8 @@ import atsb.eve.util.Utils;
 
 public class TaskLogTable {
 
-	private static final String SELECT_LATEST_TASK_SQL = "SELECT `taskLogId`,`taskName`,`startTime`,`finishTime`,`duration`,`success`,`error` FROM taskLog WHERE `taskName`=? ORDER BY `finishTime` DESC LIMIT 1";
-	private static final String INSERT_TASK_SQL = "INSERT INTO taskLog (`taskName`,`startTime`,`finishTime`,`duration`,`success`,`error`) VALUES(?,?,?,?,?,?)";
+	private static final String SELECT_LATEST_TASK_SQL = "SELECT `taskLogId`,`taskName`,`startTime`,`finishTime`,`duration`,`success`,`error` FROM tasklog WHERE `taskName`=? ORDER BY `finishTime` DESC LIMIT 1";
+	private static final String INSERT_TASK_SQL = "INSERT INTO tasklog (`taskName`,`startTime`,`finishTime`,`duration`,`success`,`error`) VALUES(?,?,?,?,?,?)";
 
 	/**
 	 * Get the latest TaskLog for the given taskName

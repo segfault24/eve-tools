@@ -17,11 +17,11 @@ import atsb.eve.util.Utils;
  */
 public class ApiAuthTable {
 
-	private static final String SELECT_BYKEYID_SQL = "SELECT `userId`,`charId`,`token`,`expires`,`refresh` FROM dirtApiAuth WHERE `keyId`=?;";
-	private static final String SELECT_BYCHARID_SQL = "SELECT `keyId`,`userId`,`token`,`expires`,`refresh` FROM dirtApiAuth WHERE `charId`=?;";
-	private static final String SELECT_BYUSERID_SQL = "SELECT `charId` FROM dirtApiAuth WHERE `userId`=?;";
-	private static final String SELECT_ALL_SQL = "SELECT `charId` FROM dirtApiAuth";
-	private static final String UPDATE_SQL = "UPDATE dirtApiAuth SET `token`=?, `expires`=?, `refresh`=? WHERE `keyId`=?;";
+	private static final String SELECT_BYKEYID_SQL = "SELECT `userId`,`charId`,`token`,`expires`,`refresh` FROM dirtapiauth WHERE `keyId`=?;";
+	private static final String SELECT_BYCHARID_SQL = "SELECT `keyId`,`userId`,`token`,`expires`,`refresh` FROM dirtapiauth WHERE `charId`=?;";
+	private static final String SELECT_BYUSERID_SQL = "SELECT `charId` FROM dirtapiauth WHERE `userId`=?;";
+	private static final String SELECT_ALL_SQL = "SELECT `charId` FROM dirtapiauth";
+	private static final String UPDATE_SQL = "UPDATE dirtapiauth SET `token`=?, `expires`=?, `refresh`=? WHERE `keyId`=?;";
 
 	public static OAuthUser getUserByKeyId(Connection db, int keyId) throws SQLException {
 		PreparedStatement stmt = db.prepareStatement(SELECT_BYKEYID_SQL);

@@ -17,7 +17,7 @@ public class MapTables {
 			+ "VALUES (?,?,?) ON DUPLICATE KEY UPDATE `regionName`=VALUES(`regionName`), `description`=VALUES(`description`)";
 	private static final String CONSTELLATION_UPSERT_SQL = "INSERT INTO constellation (`constellationId`,`constellationName`,`regionId`) "
 			+ "VALUES (?,?,?) ON DUPLICATE KEY UPDATE `constellationName`=VALUES(`constellationName`), `regionId`=VALUES(`regionId`)";
-	private static final String SOLARSYSTEM_UPSERT_SQL = "INSERT INTO solarSystem "
+	private static final String SOLARSYSTEM_UPSERT_SQL = "INSERT INTO solarsystem "
 			+ "(`solarSystemId`, `solarSystemName`, `constellationId`, `regionId`, `x`, `y`, `z`, `security`) "
 			+ "VALUES (?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE "
 			+ "`solarSystemName`=VALUES(`solarSystemName`), `constellationId`=VALUES(`constellationId`), `regionId`=VALUES(`regionId`), "
@@ -26,7 +26,7 @@ public class MapTables {
 			+ "VALUES (?,?,?,?,?) ON DUPLICATE KEY UPDATE "
 			+ "`stationName`=VALUES(`stationName`), `solarSystemId`=VALUES(`solarSystemId`), `constellationId`=VALUES(`constellationId`), `regionId`=VALUES(`regionId`)";
 
-	private static final String REGION_BY_SYSTEM_SQL = "SELECT r.`regionId`, r.`regionName`, r.`description` FROM region AS r JOIN solarSystem AS s ON s.regionId=r.regionId WHERE s.solarSystemId=?";
+	private static final String REGION_BY_SYSTEM_SQL = "SELECT r.`regionId`, r.`regionName`, r.`description` FROM region AS r JOIN solarsystem AS s ON s.regionId=r.regionId WHERE s.solarSystemId=?";
 	private static final String REGION_BY_NAME_SQL = "SELECT `regionId`, `regionName`, `description` FROM region WHERE `regionName`=?";
 
 	public static void upsert(Connection db, Region r) throws SQLException {
@@ -76,7 +76,7 @@ public class MapTables {
 	}
 
 	public static void delete(Connection db, SolarSystem s) throws SQLException {
-		PreparedStatement stmt = db.prepareStatement("DELETE FROM solarSystem WHERE solarSystemId=?");
+		PreparedStatement stmt = db.prepareStatement("DELETE FROM solarsystem WHERE solarSystemId=?");
 		stmt.setInt(1, s.getSolarSystemId());
 		stmt.execute();
 		Utils.closeQuietly(stmt);

@@ -11,7 +11,7 @@ import atsb.eve.util.Utils;
 
 public class ListItemTable {
 
-	private static final String SELECT_BY_ID_SQL = "SELECT `typeId`,`quantity` FROM dirtListItem WHERE `listId`=?";
+	private static final String SELECT_BY_ID_SQL = "SELECT `typeId`,`quantity` FROM dirtlistitem WHERE `listId`=?";
 
 	public static Map<Integer, Integer> getListItems(Connection db, int listId) throws SQLException {
 		PreparedStatement stmt = db.prepareStatement(SELECT_BY_ID_SQL);

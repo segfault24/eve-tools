@@ -11,14 +11,14 @@ import atsb.eve.util.Utils;
 
 public class MarketOrderTable {
 
-	private static final String UPSERT_SQL = "INSERT INTO marketOrder ("
+	private static final String UPSERT_SQL = "INSERT INTO marketorder ("
 			+ "`issued`,`range`,`isBuyOrder`,`duration`,`orderId`,`volumeRemain`,`minVolume`,"
 			+ "`typeId`,`volumeTotal`,`locationId`,`price`,`regionId`,`retrieved`"
 			+ ") VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE "
 			+ "`volumeRemain`=VALUES(`volumeRemain`),`price`=VALUES(`price`),"
 			+ "`retrieved`=VALUES(`retrieved`),`issued`=VALUES(`issued`)";
-	private static final String DELETE_REGION_SQL = "DELETE FROM marketOrder WHERE `regionId`=? AND `retrieved`<?";
-	private static final String DELETE_SQL = "DELETE FROM marketOrder WHERE retrieved<?";
+	private static final String DELETE_REGION_SQL = "DELETE FROM marketorder WHERE `regionId`=? AND `retrieved`<?";
+	private static final String DELETE_SQL = "DELETE FROM marketorder WHERE retrieved<?";
 
 	private static final int BATCH_SIZE = 1000;
 

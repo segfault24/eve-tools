@@ -12,12 +12,12 @@ import atsb.eve.util.Utils;
 
 public class CorpContractItemTable {
 
-	private static final String DELETE_SQL = "DELETE FROM corpContractItem WHERE contractId=?";
+	private static final String DELETE_SQL = "DELETE FROM corpcontractitem WHERE contractId=?";
 
 	private static final String SELECT_SQL = "SELECT `contractId`,`typeId`,`quantity`,"
-			+ "`recordId`,`included`,`singleton` FROM corpContractItem WHERE contractId=?";
+			+ "`recordId`,`included`,`singleton` FROM corpcontractitem WHERE contractId=?";
 
-	private static final String INSERT_SQL = "INSERT INTO corpContractItem ("
+	private static final String INSERT_SQL = "INSERT INTO corpcontractitem ("
 			+ "`contractId`,`typeId`,`quantity`,`recordId`,`included`,`singleton`"
 			+ ") VALUES (?,?,?,?,?,?) ON DUPLICATE KEY UPDATE `quantity`=VALUES(`quantity`)";
 

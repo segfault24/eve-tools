@@ -18,11 +18,11 @@ public class Utils {
 	private static Logger log = LogManager.getLogger();
 
 	private static final String SELECT_PROPERTY_SQL = "SELECT `propertyValue` FROM property WHERE `propertyName`=?";
-	private static final String SELECT_KV_SQL = "SELECT `value` FROM kvStore WHERE `key`=?";
-	private static final String UPSERT_KV_SQL = "INSERT INTO kvStore (`key`,`value`) VALUES (?,?) ON DUPLICATE KEY UPDATE `value`=VALUES(`value`)";
-	private static final String DELETE_KV_SQL = "DELETE FROM kvStore WHERE `key`=?";
-	private static final String SELECT_ETAG_SQL = "SELECT `etag` FROM apiReq WHERE `apiReqName`=?";
-	private static final String UPSERT_ETAG_SQL = "INSERT INTO apiReq (`apiReqName`,`etag`) VALUES(?,?) ON DUPLICATE KEY UPDATE `apiReqName`=VALUES(`apiReqName`),`etag`=VALUES(`etag`)";
+	private static final String SELECT_KV_SQL = "SELECT `value` FROM kvstore WHERE `key`=?";
+	private static final String UPSERT_KV_SQL = "INSERT INTO kvstore (`key`,`value`) VALUES (?,?) ON DUPLICATE KEY UPDATE `value`=VALUES(`value`)";
+	private static final String DELETE_KV_SQL = "DELETE FROM kvstore WHERE `key`=?";
+	private static final String SELECT_ETAG_SQL = "SELECT `etag` FROM apireq WHERE `apiReqName`=?";
+	private static final String UPSERT_ETAG_SQL = "INSERT INTO apireq (`apiReqName`,`etag`) VALUES(?,?) ON DUPLICATE KEY UPDATE `apiReqName`=VALUES(`apiReqName`),`etag`=VALUES(`etag`)";
 
 	public static void closeQuietly(AutoCloseable c) {
 		if (c != null) {

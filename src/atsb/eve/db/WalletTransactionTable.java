@@ -11,8 +11,8 @@ import atsb.eve.util.Utils;
 
 public class WalletTransactionTable {
 
-	private static final String INSERT_IGNORE_SQL = "INSERT IGNORE INTO `walletTransaction` (`transactionId`,`charId`,`clientId`,`date`,`isBuy`,`isPersonal`,`typeId`,`quantity`,`unitPrice`,`locationId`,`journalRefId`) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
-	private static final String LATEST_SELECT_SQL = "SELECT `transactionId` FROM `walletTransaction` WHERE `charId`=? ORDER BY `date` DESC LIMIT 1;";
+	private static final String INSERT_IGNORE_SQL = "INSERT IGNORE INTO `wallettransaction` (`transactionId`,`charId`,`clientId`,`date`,`isBuy`,`isPersonal`,`typeId`,`quantity`,`unitPrice`,`locationId`,`journalRefId`) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+	private static final String LATEST_SELECT_SQL = "SELECT `transactionId` FROM `wallettransaction` WHERE `charId`=? ORDER BY `date` DESC LIMIT 1;";
 
 	public static long getLatestTransactionId(Connection db, int charId) {
 		PreparedStatement stmt = null;

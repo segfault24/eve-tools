@@ -10,7 +10,7 @@ import atsb.eve.util.Utils;
 
 public class WalletJournalTable {
 
-	private static final String INSERT_IGNORE_SQL = "INSERT IGNORE INTO `walletJournal` (`journalId`,`charId`,`date`,`amount`,`balance`,`tax`,`firstPartyId`,`secondPartyId`,`taxReceiverId`,`description`,`reason`,`refType`,`contextId`,`contextIdType`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+	private static final String INSERT_IGNORE_SQL = "INSERT IGNORE INTO `walletjournal` (`journalId`,`charId`,`date`,`amount`,`balance`,`tax`,`firstPartyId`,`secondPartyId`,`taxReceiverId`,`description`,`reason`,`refType`,`contextId`,`contextIdType`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
 	public static boolean insertMany(Connection db, List<WalletJournalEntry> js) {
 		boolean result = true;

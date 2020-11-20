@@ -10,7 +10,7 @@ import atsb.eve.util.Utils;
 
 public class MarketHistoryTable {
 
-	private static final String INSERT_SQL = "INSERT INTO marketHistory (`typeId`,`regionId`,`date`,`highest`,`average`,`lowest`,`volume`,`orderCount`) "
+	private static final String INSERT_SQL = "INSERT INTO markethistory (`typeId`,`regionId`,`date`,`highest`,`average`,`lowest`,`volume`,`orderCount`) "
 			+ "VALUES (?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE "
 			+ "`highest`=VALUES(`highest`), `average`=VALUES(`average`), `lowest`=VALUES(`lowest`), `volume`=VALUES(`volume`), `orderCount`=VALUES(`orderCount`)";
 
