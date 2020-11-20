@@ -1,5 +1,7 @@
 USE eve;
 
+DROP TABLE IF EXISTS `dEntity`;
+DROP TABLE IF EXISTS `dLocation`;
 DROP VIEW IF EXISTS `vAmarrBestSell`;
 DROP VIEW IF EXISTS `vAmarrBestBuy`;
 DROP VIEW IF EXISTS `vJitaBestSell`;

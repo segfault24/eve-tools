@@ -8,6 +8,8 @@
 --   ux_<table>_<col1>_<col2>_...  unique indices (constraints on this table)
 --   ix_<table>_<col1>_<col2>_...  alternative indices (faster operations)
 -- additionally, indices will typically be defined in px, fx, ux, ix order
+-- views are prefixed with 'v'
+-- derived tables are prefixed with 'd'
 -- -----------------------------------------------------------------------------
 
 USE `eve`;
@@ -588,6 +590,19 @@ CREATE TABLE `merSinkFaucet` (
 
 -- -----------------------------------------------------------------------------
 
+CREATE TABLE `dEntity` (
+	`id` INT,
+	`name` VARCHAR(64),
+	PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `dLocation` (
+	`locationId` BIGINT,
+	`locationName` VARCHAR(100),
+	PRIMARY KEY (`locationId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- -----------------------------------------------------------------------------
 
 CREATE VIEW vJitaBestBuy AS SELECT typeId, MAX(price) AS best FROM marketOrder WHERE locationId=60003760 AND isBuyOrder=1 GROUP BY typeId, locationId;
 CREATE VIEW vJitaBestSell AS SELECT typeId, MIN(price) AS best FROM marketOrder WHERE locationId=60003760 AND isBuyOrder=0 GROUP BY typeId, locationId;
