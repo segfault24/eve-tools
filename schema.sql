@@ -260,12 +260,6 @@ CREATE TABLE `dirtnotification` (
 	KEY `ix_dirtnotification_alertId` (`alertId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `fortchain` (
-	`systemId` int(11) NOT NULL,
-	`superDocking` BOOLEAN DEFAULT FALSE,
-	PRIMARY KEY (`systemId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 CREATE TABLE `tasklog` (
 	`taskLogId` INT AUTO_INCREMENT,
 	`taskName` VARCHAR(255) NOT NULL,

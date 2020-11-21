@@ -27,7 +27,6 @@ DROP TABLE IF EXISTS `wallettransaction`;
 DROP TABLE IF EXISTS `walletjournal`;
 DROP TABLE IF EXISTS `apireq`;
 DROP TABLE IF EXISTS `tasklog`;
-DROP TABLE IF EXISTS `fortchain`;
 DROP TABLE IF EXISTS `dirtnotification`;
 DROP TABLE IF EXISTS `dirtalert`;
 DROP TABLE IF EXISTS `dirtstructauth`;
