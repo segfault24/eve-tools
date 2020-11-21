@@ -18,6 +18,7 @@ public class Utils {
 	private static Logger log = LogManager.getLogger();
 
 	private static final String SELECT_PROPERTY_SQL = "SELECT `propertyValue` FROM property WHERE `propertyName`=?";
+	private static final String INSERT_PROPERTY_SQL = "INSERT INTO property (`propertyName`,`propertyValue`) VALUES(?,?) ON DUPLICATE KEY UPDATE `propertyValue`=VALUES(`propertyValue`)";
 	private static final String SELECT_KV_SQL = "SELECT `value` FROM kvstore WHERE `key`=?";
 	private static final String UPSERT_KV_SQL = "INSERT INTO kvstore (`key`,`value`) VALUES (?,?) ON DUPLICATE KEY UPDATE `value`=VALUES(`value`)";
 	private static final String DELETE_KV_SQL = "DELETE FROM kvstore WHERE `key`=?";
@@ -106,12 +107,39 @@ public class Utils {
 		return propertyValue;
 	}
 
+	public static void setProperty(Connection db, String propertyName, String propertyValue) {
+		if (db == null || propertyName == null || propertyName.isEmpty()) {
+			log.warn("The db and propertyName must be non-null and non-empty");
+			return;
+		}
+
+		PreparedStatement stmt = null;
+		try {
+			stmt = db.prepareStatement(INSERT_PROPERTY_SQL);
+			stmt.setString(1, propertyName);
+			stmt.setString(2, propertyValue);
+			stmt.execute();
+		} catch (SQLException e) {
+			log.warn("Failed to set property '" + propertyName + "' in database", e);
+		} finally {
+			Utils.closeQuietly(stmt);
+		}
+	}
+
 	public static int getIntProperty(Connection db, String propertyName) {
 		return Integer.parseInt(getProperty(db, propertyName));
 	}
 
+	public static void setIntProperty(Connection db, String propertyName, int propertyValue) {
+		setProperty(db, propertyName, Integer.toString(propertyValue));
+	}
+
 	public static long getLongProperty(Connection db, String propertyName) {
 		return Long.parseLong(getProperty(db, propertyName));
+	}
+
+	public static void setLongProperty(Connection db, String propertyName, long propertyValue) {
+		setProperty(db, propertyName, Long.toString(propertyValue));
 	}
 
 	public static boolean getBoolProperty(Connection db, String propertyName) {
